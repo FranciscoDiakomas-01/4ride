@@ -79,7 +79,7 @@ export default function Router() {
       ) : (
         <aside className="px-3">
           {Array.isArray(routes) && routes.length > 0 ? (
-            <div className="grid xl:grid-cols-5 gap-6 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-1 grid-cols-1 mb-30 ">
+            <div className="grid xl:grid-cols-3 gap-6 md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-1 grid-cols-1 mb-30 ">
               {routes.map((item, key) => (
                 <Route item={item} key={key} />
               ))}

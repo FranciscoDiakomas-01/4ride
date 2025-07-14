@@ -20,7 +20,7 @@ export default function CancelRoute() {
     "outro",
   ];
   return (
-    <section className="h-screen flex flex-col gap-7">
+    <section className="h-screen flex flex-col gap-7 pb-20">
       <span className="shadow-md flex p-4 ">
         <h1 className="text-md font-semibold">Cancelar rota</h1>
       </span>
@@ -61,19 +61,21 @@ export default function CancelRoute() {
           id="message"
           className="resize-none h-30"
         />
-        <Button className="h-[45px] text-md" type="submit">
-          Enviar
-        </Button>
-        <Button
-          variant={"outline"}
-          type="reset"
-          className="text-primary  h-[45px] text-md boder border-primary shadow-none"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          Voltar
-        </Button>
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <Button className="h-[45px] w-full text-md" type="submit">
+            Enviar
+          </Button>
+          <Button
+            variant={"outline"}
+            type="reset"
+            className="text-primary  w-full  h-[45px] text-md boder border-primary shadow-none"
+            onClick={() => {
+              router.back();
+            }}
+          >
+            Voltar
+          </Button>
+        </div>
       </form>
     </section>
   );
