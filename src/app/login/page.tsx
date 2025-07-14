@@ -10,16 +10,16 @@ import { useRouter } from "next/navigation";
 export default function LoginForm() {
   const router = useRouter();
   return (
-    <main className="flex flex-col gap-4  items-center min-h-screen min-w-screen pb-8">
-      <div className="w-full xl:hidden flex flex-col relative bg-red-10  ">
+    <main className="flex flex-col gap-4  items-center min-h-screen min-w-full pb-8">
+      <div className="w-full  flex flex-col relative bg-red-10  ">
         <Image src={retangle} alt="" className="w-full max-h-[160px]" />
         <h1 className="absolute w-[60%] text-2xl left-7 top-[23%] text-white font-semibold">
           Olá! Faça login para começar
         </h1>
       </div>
-      <form className="md:w-[50%] w-[85%] flex flex-col  place-self-center">
+      <form className="md:w-[50%] w-[85%] flex flex-col  place-self-center lg:-mt-20 lg:flex-row-reverse lg:items-center lg:h-full xl:w-[70%] lg:w-[95%] lg:pt-20" >
         <Image src={women} alt="" className="object-cover -mt-3" />
-        <div className="flex flex-col gap-4 -mt-10">
+        <div className="flex flex-col gap-4 -mt-10 w-full">
           <span className="flex flex-col gap-3">
             <Label className="text-md font-medium" htmlFor="tel">
               Telefone

@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt"
-      className={`scroll-smooth text-pretty w-screen overflow-x-hidden ${popins.variable}`}
+      className={`scroll-smooth text-pretty   ${popins.variable}`}
     >
       <body> {children}</body>
     </html>

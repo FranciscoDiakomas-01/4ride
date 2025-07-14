@@ -10,7 +10,7 @@ interface prop {
 }
 export default function Notfound({ message, buttonLabel, onclick }: prop) {
   return (
-    <main className="min-h-[50dvh] w-screen flex justify-center items-center flex-col gap-3 ">
+    <main className="min-h-[50dvh]  flex justify-center items-center flex-col gap-3 ">
       <div className="flex flex-col gap-4 justify-center items-center">
         <Image
           src={box}

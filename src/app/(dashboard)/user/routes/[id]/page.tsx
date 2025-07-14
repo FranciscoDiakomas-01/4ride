@@ -36,43 +36,50 @@ export default function RouterDescription() {
         <>
           {route ? (
             <div className="pb-30">
-              <Image src={map} alt="map" className="w-full object-contain" />
-              <div className="flex flex-col gap-4 px-3">
+              <Image
+                src={map}
+                alt="map"
+                className="w-full object-contain md:object-cover md:h-[300px]"
+              />
+              <div className="flex flex-col gap-4 px-3 ">
                 <h1 className="text-xl font-semibold mt-5">Detalhes</h1>
                 {route && <Route showDescription={false} item={route} />}
 
                 {Array.isArray(users) && users.length > 0 ? (
                   <>
                     <h1 className="text-xl font-semibold">Participantes</h1>
-                    {users.map((item, index) => (
-                      <UserRoute
-                        createdAt="Desde as 14 horas e 5 min"
-                        route={route}
-                        user={item}
-                        key={index}
-                      />
-                    ))}
+                    <span className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-cols-1 gap-6">
+                      {users.map((item, index) => (
+                        <UserRoute
+                          createdAt="Desde as 14 horas e 5 min"
+                          route={route}
+                          user={item}
+                          key={index}
+                        />
+                      ))}
+                    </span>
                   </>
                 ) : (
                   <h1 className="text-xl font-semibold">Sem participantes</h1>
                 )}
-                <Button
-                  onClick={() => {
-                    router.back();
-                  }}
-                  className="h-[45px] text-md"
-                >
-                  Voltar
-                </Button>
+                <div className="grid md:grid-cols-2 gap-6 grid-cols-1">
                   <Button
-                    
-                  onClick={() => {
-                    router.push(`/user/routes/cancel/${id}`);
-                  }}
-                  className="h-[45px] text-md bg-red-500 hover:bg-red-500"
-                >
-                  Sair <LogOut />
-                </Button>
+                    onClick={() => {
+                      router.back();
+                    }}
+                    className="h-[45px] text-md"
+                  >
+                    Voltar
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      router.push(`/user/routes/cancel/${id}`);
+                    }}
+                    className="h-[45px] text-md bg-red-500 hover:bg-red-500"
+                  >
+                    Sair <LogOut />
+                  </Button>
+                </div>
               </div>
             </div>
           ) : (

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { mockRoutes } from "@/constants/routes.mock";
 import IRoute from "@/types/route";
-import { ArrowLeftIcon, Locate, Search } from "lucide-react";
+import { ArrowLeftIcon, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -79,7 +79,7 @@ export default function Router() {
       ) : (
         <aside className="px-3">
           {Array.isArray(routes) && routes.length > 0 ? (
-            <div className="grid xl:grid-cols-3 gap-6 md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-1 grid-cols-1 mb-30 ">
+            <div className="grid xl:grid-cols-3 gap-6 lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 mb-30 ">
               {routes.map((item, key) => (
                 <Route item={item} key={key} />
               ))}
@@ -89,9 +89,6 @@ export default function Router() {
           )}
         </aside>
       )}
-      <Button className="fixed bottom-30 right-2 rounded-full h-[40px] w-[40px] z-[777]">
-        <Locate />
-      </Button>
     </main>
   );
 }

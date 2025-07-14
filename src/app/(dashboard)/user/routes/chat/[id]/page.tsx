@@ -95,7 +95,7 @@ export default function RouteChat() {
       </span>
       <span>
         {load ? (
-          <div className="w-screen scale-75 flex justify-center items-center h-[80dvh]">
+          <div className="w-full scale-75 flex justify-center items-center h-[80dvh]">
             <Loader type="Spinner" />
           </div>
         ) : (
@@ -120,7 +120,10 @@ export default function RouteChat() {
         action=""
         className="fixed shadow bg-white h-15 items-center overflow-hidden left-0 p-2 bottom-20 gap-2 flex z-4 w-full"
       >
-        <textarea className="resize-none h-full w-full border px-4 py-1 text-primary rounded-full" />
+        <textarea
+          placeholder="Degite qualquer coisa"
+          className="resize-none h-full w-full border px-4 py-1 text-primary rounded-full"
+        />
         <Button>
           <Send />
         </Button>

@@ -30,7 +30,7 @@ export default function UserLayout({
     {
       title: "Perfil",
       icon: <User2Icon size={18} />,
-      to: "/user",
+      to: "/user/profile",
     },
   ];
   const [active, setACtive] = useState(0);
@@ -49,7 +49,7 @@ export default function UserLayout({
 
       <span
         id="bottomTabs"
-        className="md:hidden fex fixed bottom-0 z-67 left-0 bg-white  px-2 py-4 grid grid-cols-4 w-full gap-4 shadow border-t"
+        className="fex fixed bottom-0 z-67 left-0 bg-white  px-2 py-4 grid grid-cols-4 w-full gap-4 shadow border-t"
       >
         {tabs.map((item, key) => (
           <Link

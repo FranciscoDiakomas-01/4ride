@@ -20,7 +20,7 @@ export default function CancelRoute() {
     "outro",
   ];
   return (
-    <section className="h-screen flex flex-col gap-7 pb-20">
+    <section className="h-screen flex flex-col gap-7 pb-30">
       <span className="shadow-md flex p-4 ">
         <h1 className="text-md font-semibold">Cancelar rota</h1>
       </span>

@@ -1,13 +1,19 @@
 "use client";
 
 import Loader from "@/components/Loader";
-import { ArrowLeft } from "lucide-react";
+import Notfound from "@/components/Notfound";
+import PaymentCard from "@/components/Payment";
+import { Button } from "@/components/ui/button";
+import { mockPayments } from "@/constants/payment";
+import { IPayment } from "@/types/payemnt";
+import { ArrowLeft, CreditCard } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
   const [load, setLoad] = useState(true);
   const router = useRouter();
+  const [payments, setPayments] = useState<IPayment[]>(mockPayments);
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,7 +37,25 @@ export default function Profile() {
           <Loader type="Spinner" />
         </div>
       ) : (
-        <span></span>
+        <span>
+          <Button
+            className="fixed right-5 bottom-25 z-4"
+            onClick={() => {
+              router.push("/user/payments/create");
+            }}
+          >
+            <CreditCard />
+          </Button>
+          {Array.isArray(payments) && payments.length > 0 ? (
+            <aside className="flex flex-col gap-5 px-4 pb-30">
+              {payments.map((item, key) => (
+                <PaymentCard payment={item} key={key} />
+              ))}
+            </aside>
+          ) : (
+            <Notfound message="Nenhum pagamento feito" />
+          )}
+        </span>
       )}
     </main>
   );

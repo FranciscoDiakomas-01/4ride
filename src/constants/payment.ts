@@ -1,7 +1,84 @@
-export default interface IPaymnt {
-  id: number | string;
-  status: "Pendente" | "Confirmado" | "Cancelado";
-  date: string,
-  amount: string
-  method : "Express" | "Referência"
-}
+import { IPayment } from "@/types/payemnt";
+
+export const mockPayments: IPayment[] = [
+  {
+    id: 1,
+    message: "Pagamento confirmado com sucesso.",
+    status: "Confirmado",
+    createdAt: "10, Julho, 2025",
+    amount: 3500,
+    method: "Transferência",
+  },
+  {
+    id: 2,
+    message: "Aguardando verificação do pagamento.",
+    status: "Pendente",
+    createdAt: "09, Julho, 2025",
+    amount: 2200,
+    method: "Referência",
+  },
+  {
+    id: 3,
+    message: "Pagamento cancelado por erro de dados.",
+    status: "Cancelado",
+    createdAt: "08, Julho, 2025",
+    amount: 1800,
+    method: "Express",
+  },
+  {
+    id: 4,
+    message: "Pagamento recebido via referência.",
+    status: "Confirmado",
+    createdAt: "07, Julho, 2025",
+    amount: 5000,
+    method: "Referência",
+  },
+  {
+    id: 5,
+    message: "Pagamento ainda está em processamento.",
+    status: "Pendente",
+    createdAt: "06, Julho, 2025",
+    amount: 2500,
+    method: "Transferência",
+  },
+  {
+    id: 6,
+    message: "Pagamento reembolsado.",
+    status: "Cancelado",
+    createdAt: "05, Julho, 2025",
+    amount: 1200,
+    method: "Express",
+  },
+  {
+    id: 7,
+    message: "Pagamento feito via transferência bancária.",
+    status: "Confirmado",
+    createdAt: "04, Julho, 2025",
+    amount: 4600,
+    method: "Transferência",
+  },
+  {
+    id: 8,
+    message: "Erro ao processar o pagamento.",
+    status: "Cancelado",
+    createdAt: "03, Julho, 2025",
+    amount: 3100,
+    method: "Referência",
+  },
+  {
+    id: 9,
+    message: "Pagamento pendente de confirmação bancária.",
+    status: "Pendente",
+    createdAt: "02, Julho, 2025",
+    amount: 2750,
+    method: "Transferência",
+  },
+  {
+    id: 10,
+    message: "Pagamento confirmado via Express.",
+    status: "Confirmado",
+    createdAt: "01, Julho, 2025",
+    amount: 3900,
+    method: "Express",
+  },
+];

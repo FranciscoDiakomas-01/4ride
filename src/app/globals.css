@@ -125,7 +125,8 @@
   }
   button {
     transition: all .4s linear;
-    cursor : pointer
+    cursor : pointer;
+    font-weight: normal;
   }
   button:hover {
     opacity: 0.8;
@@ -140,5 +141,21 @@
   box-shadow: none; 
   background: transparent;
 }
+
+ * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) white;
+  }
+
+  *:-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  *:-webkit-scrollbar-track {
+    background: #e5e7eb; 
+  }
+
+
 
 }
