@@ -18,7 +18,7 @@ export default function UserHome() {
         <Image className="h-70 w-80 object-contain" src={car} alt="car" />
         <div className="grid w-full grid-cols-2 gap-3 items-center">
           <Button
-            className="h-[50px] text-md md:w-[50%] w-full "
+            className="h-[50px] text-white text-md md:w-[50%] w-full "
             onClick={() => {
               router.push("/user/routes");
             }}

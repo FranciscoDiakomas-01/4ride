@@ -23,7 +23,7 @@ export default function Route({ item, showDescription = true }: props) {
           >
             {item.from} - {item.to}
           </h1>
-          <div className="grid grid-cols-3 gap-1 text-nowrap">
+          <div className="grid grid-cols-2 gap-1 text-nowrap">
             <p className="border-r-2 w-[65px]">{item.from}</p>
             <p className="border-r-2 w-[60px]">{item.to}</p>
             <p>{item.users} Pessoas</p>

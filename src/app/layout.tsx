@@ -59,7 +59,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`scroll-smooth text-pretty ${popins.variable}`}>
+    <html
+      lang="pt"
+      className={`scroll-smooth text-pretty w-screen overflow-x-hidden ${popins.variable}`}
+    >
       <body> {children}</body>
     </html>
   );
