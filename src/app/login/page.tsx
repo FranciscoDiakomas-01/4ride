@@ -7,10 +7,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { EyeClosed, PhoneCall } from "lucide-react";
 import { useRouter } from "next/navigation";
-export default function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function LoginForm() {
   const router = useRouter();
   return (
     <main className="flex flex-col gap-4  items-center min-h-screen min-w-screen pb-8">

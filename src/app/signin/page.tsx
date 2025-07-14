@@ -5,13 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { ArrowLeft, EyeClosed, PhoneCall, User } from "lucide-react";
+import {  EyeClosed, PhoneCall, User } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-export default function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function LoginForm() {
   
     const router = useRouter();
   return (
