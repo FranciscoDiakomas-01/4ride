@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import { Bell, Car, Home, User2Icon } from "lucide-react";
+import { Bell, Car, CreditCard, Home, User2Icon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function UserLayout({
   children,
@@ -21,9 +23,9 @@ export default function UserLayout({
       to: "/user/routes",
     },
     {
-      title: "Notificações",
-      icon: <Bell size={18} />,
-      to: "/user",
+      title: "Pagamentos",
+      icon: <CreditCard size={18} />,
+      to: "/user/payments",
     },
     {
       title: "Perfil",
@@ -32,8 +34,17 @@ export default function UserLayout({
     },
   ];
   const [active, setACtive] = useState(0);
+  const router = useRouter();
   return (
     <main>
+      <Button
+        onClick={() => {
+          router.push("/user/notifications");
+        }}
+        className="fixed right-2 top-4 z-[99999999999]"
+      >
+        <Bell />
+      </Button>
       {children}
 
       <span
@@ -43,7 +54,7 @@ export default function UserLayout({
         {tabs.map((item, key) => (
           <Link
             className={clsx(
-              "flex flex-col justify-center items-center transition-all p-1.5 px-2 rounded-sm",
+              "flex flex-col justify-center items-center transition-all p-1.5 px-2 rounded-sm hover:bg-gray-100",
 
               {
                 "text-primary  bg-green-100/50": active == key,

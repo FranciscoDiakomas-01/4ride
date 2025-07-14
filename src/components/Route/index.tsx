@@ -1,13 +1,18 @@
+"use client";
 import IRoute from "@/types/route";
 import { LucideLocationEdit } from "lucide-react";
 import car from "@/assets/car.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import clsx from "clsx";
 interface props {
   item: IRoute;
+  showDescription?: boolean;
 }
 
-export default function Route({ item }: props) {
+export default function Route({ item, showDescription = true }: props) {
+  const router = useRouter();
   return (
     <figure className="border-green-300 border-1 rounded-md p-3 bg-green-100/50 flex flex-col gap-5">
       <span className="flex gap-4 justify-between">
@@ -32,10 +37,27 @@ export default function Route({ item }: props) {
       </span>
 
       <figcaption className="grid grid-cols-2 gap-4">
-        <Button className="w-full text-green-500 h-[45px] text-md bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500">
+        <Button
+          className={clsx("w-full  h-[45px] text-md border-0 ", {
+            "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
+              showDescription,
+          })}
+          onClick={() => {
+            router.push(`/user/routes/chat/${item.id}`);
+          }}
+        >
           Entrar
         </Button>
-        <Button className="w-full  h-[45px] text-md">Detalhes</Button>
+        {showDescription && (
+          <Button
+            className="w-full  h-[45px] text-md"
+            onClick={() => {
+              router.push(`/user/routes/${item.id}`);
+            }}
+          >
+            Detalhes
+          </Button>
+        )}
       </figcaption>
     </figure>
   );

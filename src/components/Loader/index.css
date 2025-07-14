@@ -8,11 +8,11 @@
 }
 
 .stopp1 {
-  stop-color:#7de4ce;
+  stop-color:oklch(32.773% 0.04921 176.511);
 }
 
 .stopp2 {
-  stop-color:#0e49c8;
+  stop-color:oklch(32.773% 0.04921 176.511);
 }
 
 .halvan {
