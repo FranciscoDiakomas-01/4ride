@@ -14,7 +14,7 @@ interface props {
 export default function Route({ item, showDescription = true }: props) {
   const router = useRouter();
   return (
-    <figure className="border-green-300 border-1 rounded-md p-3 bg-green-100/50 flex flex-col gap-5">
+    <figure className="border-green-300 border-1 rounded-md p-3 bg-green-100/50 flex flex-col gap-5 overflow-hidden">
       <span className="flex gap-4 justify-between">
         <div className="w-[80%] flex flex-col gap-4">
           <h1
@@ -23,7 +23,7 @@ export default function Route({ item, showDescription = true }: props) {
           >
             {item.from} - {item.to}
           </h1>
-          <div className="grid grid-cols-2 gap-1 text-nowrap">
+          <div className="grid grid-cols-3 gap-1 text-nowrap">
             <p className="border-r-2 w-[65px]">{item.from}</p>
             <p className="border-r-2 w-[60px]">{item.to}</p>
             <p>{item.users} Pessoas</p>
@@ -33,7 +33,7 @@ export default function Route({ item, showDescription = true }: props) {
             {item.distance} de distância ( {item.status} )
           </p>
         </div>
-        <Image className="h-20 w-20 object-contain" src={car} alt="car" />
+        <Image className="h-13 w-13 object-contain" src={car} alt="car" />
       </span>
 
       <figcaption className="grid grid-cols-2 gap-4">
