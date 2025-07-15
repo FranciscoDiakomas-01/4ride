@@ -62,6 +62,8 @@ export default function MyRoutes() {
             Canceladas
           </TabsTrigger>
         </TabsList>
+
+        
         <TabsContent value="1">
           {load ? (
             <div className="flex w-full justify-center items-center scale-75 min-h-[50dvh]">
@@ -70,7 +72,7 @@ export default function MyRoutes() {
           ) : (
             <>
               {Array.isArray(myroutes) && myroutes.length > 0 ? (
-                <aside className="grid grid-cols-1 gap-6 mt-3 mb-30">
+                <aside className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3 mb-30">
                   {myroutes.map((route, index) => (
                     <MyRoute route={route} key={index} status="Concluído" />
                   ))}

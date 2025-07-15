@@ -25,12 +25,12 @@ const items = [
   },
   {
     title: "Passageiros",
-    url: "/admin",
+    url: "/admin/users",
     icon: User,
   },
   {
     title: "Rotas",
-    url: "/admin",
+    url: "/admin/routes",
     icon: CarTaxiFront,
   },
   {
@@ -40,12 +40,12 @@ const items = [
   },
   {
     title: "Notificações",
-    url: "/admin",
+    url: "/admin/notifications",
     icon: Bell,
   },
   {
     title: "Configurações",
-    url: "/admin",
+    url: "/admin/settings",
     icon: Settings,
   },
 ];
