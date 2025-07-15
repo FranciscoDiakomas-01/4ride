@@ -22,7 +22,7 @@ export default function LoginForm() {
         });
       }, []);
   return (
-    <main className="flex flex-col gap-4  items-center min-h-screen min-w-full pb-8 overflow-x-hidden">
+    <main className="flex flex-col gap-4  items-center min-h-screen min-w-full pb-8 overflow-hidden">
       <div
         data-aos="zoom-in"
         className="w-full flex flex-col relative bg-red-10  "
