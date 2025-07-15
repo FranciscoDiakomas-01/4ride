@@ -77,7 +77,6 @@ export default function LoginForm() {
 
           <div className="flex flex-col gap-4 mt-4" data-aos="fade-up">
             <Button
-              data-aos="fade-right"
               type="submit"
               className="w-full bg-primary text-white border-0 h-[45px] text-md hover:bg-primary hover:text-white "
               variant={"outline"}
@@ -85,7 +84,6 @@ export default function LoginForm() {
               Acessar conta
             </Button>
             <Button
-              data-aos="fade-left"
               variant="outline"
               type="reset"
               className="w-full bg-white text-primary border-1 border-primary h-[45px] text-md "
