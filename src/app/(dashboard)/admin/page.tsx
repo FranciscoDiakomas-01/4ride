@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import Stats from "@/components/Stats";
 import { AdminBarCharts } from "@/components/Charts/barCharts";
+import { ChartLinear } from "@/components/Charts/paymentChart";
 
 export default function AdminHome() {
   const [stats, setStats] = useState<IStats[]>([]);
@@ -69,7 +70,8 @@ export default function AdminHome() {
                 <Stats iskz={key == stats.length - 1} stats={item} key={key} />
               ))}
           </span>
-          <AdminBarCharts />
+            <AdminBarCharts />
+            <ChartLinear/>
         </>
       )}
     </main>

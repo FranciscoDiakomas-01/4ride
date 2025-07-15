@@ -152,7 +152,7 @@ export function AdminBarCharts() {
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="max-h-[350px]  w-full h-[350px] overflow-hidden"
+          className="lg:max-h-[350px]   w-full lg:h-[350px] overflow-hidden"
         >
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
