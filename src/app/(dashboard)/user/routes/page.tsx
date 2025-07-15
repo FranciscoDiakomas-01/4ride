@@ -24,7 +24,7 @@ export default function Router() {
   const router = useRouter();
   return (
     <main className="flex flex-col gap-9 ">
-      <div className="bg-white shadow p-4 py-5 sticky top-0 flex gap-3 items-center">
+      <div className="bg-white shadow p-4 py-5 sticky top-0 flex gap-3 items-center z-[95945]">
         <ArrowLeftIcon
           className="cursor-pointer"
           onClick={() => {

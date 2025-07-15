@@ -21,7 +21,7 @@ export default function UserData() {
   }, []);
   return (
     <main className="flex flex-col gap-4 pb-30">
-      <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold ">
+      <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945] ">
         <ArrowLeft
           className="cursor-pointer"
           onClick={() => {
