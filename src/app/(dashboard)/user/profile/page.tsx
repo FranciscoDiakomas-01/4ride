@@ -30,13 +30,13 @@ export default function Profile() {
       icon: <PhoneCall />,
       title: "Telefone",
       description: "Atualize seu número de celular",
-      to: "/user/profile/credentials",
+      to: "/user/profile/number",
     },
     {
       icon: <KeyRoundIcon />,
       title: "Credenciais",
       description: "Atualize sua senha de e autenticação.",
-      to: "/user/profile/credentials",
+      to: "/user/profile/credential",
     },
     {
       icon: <BellIcon />,
@@ -49,12 +49,6 @@ export default function Profile() {
       title: "Pagamentos",
       description: "Histórico de transações e métodos de pagamento.",
       to: "/user/payments",
-    },
-    {
-      icon: <ShieldCheckIcon />,
-      title: "Segurança",
-      description: "Veja sessões ativas, dispositivos e permissões.",
-      to: "/perfil/seguranca",
     },
     {
       icon: <LogOutIcon />,
@@ -104,7 +98,14 @@ export default function Profile() {
                 </AccordionTrigger>
                 <AccordionContent className="active:scale-100 flex flex-col gap-3">
                   <p>{item.description}</p>
-                  <Button className="md:w-[25%] w-full h-[45px]">
+                  <Button
+                    onClick={() => {
+                      if (item.to && item.to?.length > 0) {
+                        router.push(item.to);
+                      }
+                    }}
+                    className="md:w-[25%] w-full h-[45px]"
+                  >
                     {item.title} {item.icon}{" "}
                   </Button>
                 </AccordionContent>
