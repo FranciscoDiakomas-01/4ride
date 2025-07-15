@@ -11,7 +11,10 @@ interface prop {
 }
 export default function MyRoute({ route, status }: prop) {
   return (
-    <figure className="flex border shadow flex-col gap-3 p-2 rounded-sm">
+    <figure
+      data-aos="fade-up"
+      className="flex border shadow flex-col gap-3 p-2 rounded-sm"
+    >
       <div className="flex  gap-5">
         <span className="bg-primary rounded-md flex justify-center items-center">
           <Image src={car} alt="car" />

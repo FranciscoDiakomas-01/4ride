@@ -32,6 +32,7 @@ export default function CreatePayment() {
         </TabsList>
         <TabsContent value="1">
           <form
+            data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
           >
@@ -62,6 +63,7 @@ export default function CreatePayment() {
         </TabsContent>
         <TabsContent value="2">
           <form
+            data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
           >
@@ -84,6 +86,7 @@ export default function CreatePayment() {
         </TabsContent>
         <TabsContent value="3">
           <form
+            data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
           >
@@ -107,7 +110,7 @@ export default function CreatePayment() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4 " >
+            <div className="grid md:grid-cols-2 gap-4 ">
               <Button className="text-md  h-[45px]">
                 Enviar <ArrowUp className="rotate-40" />{" "}
               </Button>

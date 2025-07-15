@@ -14,7 +14,10 @@ interface props {
 export default function Route({ item, showDescription = true }: props) {
   const router = useRouter();
   return (
-    <figure className="border-green-300 border-1 rounded-md p-3 bg-green-100/50 flex flex-col gap-5 overflow-hidden">
+    <figure
+      data-aos="fade-up"
+      className="border-green-300 border-1 rounded-md p-3 bg-green-100/50 flex flex-col gap-5 overflow-hidden"
+    >
       <span className="flex gap-4 justify-between">
         <div className="w-[80%] flex flex-col gap-4">
           <h1

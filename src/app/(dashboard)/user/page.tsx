@@ -17,7 +17,7 @@ export default function UserHome() {
   }, []);
   const router = useRouter();
   return (
-    <main className="w-full flex flex-col gap-3 p-4 pt-8 pb-30">
+    <main className="w-full overflow-x-hidden flex flex-col gap-3 p-4 pt-8 pb-30">
       {load ? (
         <div className="flex justify-center items-center min-h-[70dvh] w-full scale-75">
           <Loader type="Spinner" />
@@ -26,14 +26,27 @@ export default function UserHome() {
         <>
           {" "}
           <div className="flex flex-col">
-            <p className="text-md text-gray-500">Um dia incrível pra você</p>
-            <h1 className="text-4xl font-semibold text-primary">Francisco!</h1>
+            <p className="text-md text-gray-500" data-aos="fade-left">
+              Um dia incrível pra você
+            </p>
+            <h1
+              className="text-4xl font-semibold text-primary"
+              data-aos="fade-right"
+            >
+              Francisco!
+            </h1>
           </div>
           <AcountCard amount="100000" number="957777993" />
           <div className="flex flex-col w-full  justify-center items-center">
-            <Image className="h-70 w-80 lg:hidden object-contain" src={car} alt="car" />
+            <Image
+              className="h-70 w-80 lg:hidden object-contain"
+              src={car}
+              alt="car"
+              data-aos="fade-up"
+            />
             <div className="grid w-full lg:mt-6 grid-cols-2 gap-3 items-center">
               <Button
+                data-aos="fade-right"
                 className="h-[50px] text-white text-md md:w-[50%] w-full "
                 onClick={() => {
                   router.push("/user/routes");
@@ -42,6 +55,7 @@ export default function UserHome() {
                 Encontrar rota
               </Button>{" "}
               <Button
+                data-aos="fade-left"
                 onClick={() => {
                   router.push("/user/routes/myroutes");
                 }}

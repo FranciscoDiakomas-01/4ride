@@ -10,9 +10,19 @@ interface prop {
 }
 export default function UserRoute({ user, route, createdAt }: prop) {
   return (
-    <figure className="flex flex-col gap-3 border border-primary p-3 rounded-md">
+    <figure
+      data-aos="fade-up"
+      data-aos-duration="1000"
+      className="flex flex-col gap-3 border border-primary p-3 rounded-md"
+    >
       <span className="flex gap-2">
-        <img width={60} height={60} className="rounded-md" src={user.profile} alt={user.fullname} />
+        <img
+          width={60}
+          height={60}
+          className="rounded-md"
+          src={user.profile}
+          alt={user.fullname}
+        />
         <span className="flex flex-col">
           <h1 className="text-md font-semibold">{user.fullname}</h1>
           <small className="text-sm text-gray-500">{user.tel}</small>

@@ -37,6 +37,7 @@ export default function RouterDescription() {
           {route ? (
             <div className="pb-30">
               <Image
+                data-aos="fade"
                 src={map}
                 alt="map"
                 className="w-full object-contain md:object-cover md:h-[300px]"
@@ -62,7 +63,10 @@ export default function RouterDescription() {
                 ) : (
                   <h1 className="text-xl font-semibold">Sem participantes</h1>
                 )}
-                <div className="grid md:grid-cols-2 gap-6 grid-cols-1">
+                <div
+                  className="grid md:grid-cols-2 gap-6 grid-cols-1"
+                  data-aos="fade"
+                >
                   <Button
                     onClick={() => {
                       router.back();

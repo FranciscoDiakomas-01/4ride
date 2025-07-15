@@ -34,7 +34,10 @@ export default function Router() {
         <p className="font-semibold">Grupos de Rotas</p>
       </div>
       <form action="" className="px-3 flex flex-col gap-4">
-        <div className="flex gap-2 border-1 p-1.5 rounded-md">
+        <div
+          className="flex gap-2 border-1 p-1.5 rounded-md"
+          data-aos="fade-right"
+        >
           <div
             className="flex justify-center items-center rounded-full
             bg-gray-100 p-2 text-gray-600"
@@ -49,7 +52,10 @@ export default function Router() {
             className="w-full h-full border-0 shadow-none outline-0 outline-none"
           />
         </div>
-        <span className="flex items-center gap-4 justify-between">
+        <span
+          data-aos="fade-right"
+          className="flex items-center gap-4 justify-between"
+        >
           <div className="flex gap-2 border-1 p-1.5 rounded-md w-[85%]">
             <div
               className="flex justify-center items-center rounded-full

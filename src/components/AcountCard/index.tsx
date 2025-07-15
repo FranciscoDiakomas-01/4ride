@@ -8,7 +8,10 @@ interface props {
 }
 export default function AcountCard({ amount, number }: props) {
   return (
-    <div className="flex flex-col bg-primary text-white h-[180px] md:w-[400px] w-full  justify-between p-3 rounded-md gap-4">
+    <div
+      data-aos="fade-up"
+      className="flex flex-col bg-primary text-white h-[180px] md:w-[400px] w-full  justify-between p-3 rounded-md gap-4"
+    >
       <span className="flex justify-between">
         <div>
           <p className="text-sm">Meu saldo</p>
@@ -21,7 +24,9 @@ export default function AcountCard({ amount, number }: props) {
         </div>
       </span>
 
-      <div className="flex gap-4 font-bold text-2xl tracking-widest">{number}</div>
+      <div className="flex gap-4 font-bold text-2xl tracking-widest">
+        {number}
+      </div>
       <h1 className="text-[14px] text-gray-50 opacity-40">
         Seus créditos inicias equivalem a 12 viagens
       </h1>

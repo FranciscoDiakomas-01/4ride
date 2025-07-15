@@ -20,7 +20,7 @@ export default function UserData() {
     }, 3000);
   }, []);
   return (
-    <main className="flex flex-col gap-4">
+    <main className="flex flex-col gap-4 pb-30">
       <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold ">
         <ArrowLeft
           className="cursor-pointer"
@@ -38,6 +38,7 @@ export default function UserData() {
       ) : (
         <div className="p-4 flex flex-col">
           <form
+            data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%] "
           >

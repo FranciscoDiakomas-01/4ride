@@ -10,8 +10,10 @@ interface props {
 
 export default function PaymentCard({ payment }: props) {
   return (
-    <figure className="flex flex-col gap-4 p-3 border rounded-sm">
-      
+    <figure
+      data-aos="fade-up"
+      className="flex flex-col gap-4 p-3 border rounded-sm"
+    >
       <div className="flex gap-5">
         <div
           className={clsx(

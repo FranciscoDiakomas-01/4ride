@@ -73,17 +73,29 @@ export default function Profile() {
 
       <div className="flex flex-col gap-4 justify-center items-center pb-30 px-3">
         <article className="flex gap-9 w-full md:w-[50%] flex-col-reverse justify-center items-center">
-          <span className="flex flex-col justify-center items-center gap-3">
+          <span
+            className="flex flex-col justify-center items-center gap-3 "
+            data-aos="fade-up"
+          >
             <h1 className="font-semibold text-2xl">{user.fullname}</h1>
             <small className="text-sm text-gray-500 text-center">
               {user.tel}
             </small>
           </span>
-          <img className="h-30 w-30 rounded-full" src={user.profile} />
+          <img
+            className="h-30 w-30 rounded-full"
+            src={user.profile}
+            data-aos="fade-up"
+          />
         </article>
 
-        <span className="flex flex-col px-3 lg:w-[50%] w-full overflow-x-hidden">
-          <Accordion type="single" collapsible>
+        <span className="flex flex-col px-3 lg:w-[50%] w-full overflow-x-hidden overflow-hidden">
+          <Accordion
+            type="single"
+            className="overflow-hidden"
+            collapsible
+            data-aos="fade-up"
+          >
             {routes.map((item, key) => (
               <AccordionItem
                 key={key}
