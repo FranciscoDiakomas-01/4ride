@@ -8,7 +8,7 @@ export const mockUsers: IUser[] = [
     profile: "https://i.pravatar.cc/150?img=1",
     cash: 1000,
     points: 10,
-    status: "Activo",
+    status: "Desactivo",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const mockUsers: IUser[] = [
     profile: "https://i.pravatar.cc/150?img=2",
     cash: 1000,
     points: 10,
-    status: "Activo",
+    status: "Desactivo",
   },
   {
     id: 3,

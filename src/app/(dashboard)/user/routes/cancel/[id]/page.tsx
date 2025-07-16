@@ -20,7 +20,7 @@ export default function CancelRoute() {
     "outro",
   ];
   return (
-    <section  className="h-screen overflow-x-hidden flex flex-col gap-7 pb-30">
+    <section className="h-screen overflow-x-hidden flex flex-col gap-7 pb-30">
       <span className="shadow-md flex p-4 ">
         <h1 className="text-md font-semibold">Cancelar rota</h1>
       </span>
@@ -39,11 +39,11 @@ export default function CancelRoute() {
           value={selected}
           defaultValue={motives[0]}
           onValueChange={setSelected}
+          data-aos="fade-up"
         >
           {motives.map((item, index) => (
             <div
               key={index}
-              data-aos="fade-up"
               className={clsx("flex items-center gap-3", {
                 "text-primary": selected === item,
               })}
