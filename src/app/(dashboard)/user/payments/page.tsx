@@ -4,7 +4,7 @@ import Loader from "@/components/Loader";
 import Notfound from "@/components/Notfound";
 import PaymentCard from "@/components/Payment";
 import { Button } from "@/components/ui/button";
-import { mockPayments } from "@/constants/payment";
+import { paymentMocks } from "@/constants/payment";
 import { IPayment } from "@/types/payemnt";
 import { ArrowLeft, CreditCard } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export default function Profile() {
   const [load, setLoad] = useState(true);
   const router = useRouter();
-  const [payments, setPayments] = useState<IPayment[]>(mockPayments);
+  const [payments, setPayments] = useState<IPayment[]>(paymentMocks);
 
   useEffect(() => {
     setTimeout(() => {
