@@ -11,7 +11,7 @@ interface prop {
 }
 export default function Stats({ stats, iskz , showBtn = true}: prop) {
   return (
-    <figure className="border p-3 rounded-sm border-primary/10 gap-5 min-h-[120px] flex flex-col justify-between">
+    <figure data-aos="zoom-in" className="border p-3 rounded-sm border-primary/10 gap-5 min-h-[120px] flex flex-col justify-between">
       <span className="flex justify-between gap-4">
         {stats.icon}
         <div>{stats.title}</div>

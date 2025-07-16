@@ -25,7 +25,7 @@ export default function UserNumber() {
             router.back();
           }}
         />
-        <h1>Credenciais</h1>
+        <h1>Preferências</h1>
       </span>
 
       {load ? (

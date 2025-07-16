@@ -36,7 +36,7 @@ export default function RouterDescription() {
       ) : (
         <>
           {route ? (
-            <div className="pb-30">
+            <div>
               <Image
                 data-aos="fade"
                 src={map}

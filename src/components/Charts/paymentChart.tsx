@@ -57,7 +57,7 @@ export function ChartLinear() {
   const filteredData = chartData;
 
   return (
-    <Card className="pt-0">
+    <Card className="pt-0" data-aos="fade-up">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Pagamentos - Gráfico Interativo</CardTitle>

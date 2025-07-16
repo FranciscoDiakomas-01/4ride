@@ -1,7 +1,18 @@
+"use client";
+import "aos/dist/aos.css";
+import AOS from "aos";
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sideBar";
+import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
   return (
     <SidebarProvider>
       <main className="w-full">

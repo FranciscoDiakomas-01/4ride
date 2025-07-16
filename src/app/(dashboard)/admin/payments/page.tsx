@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, CreditCard, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import {
@@ -40,36 +40,38 @@ import Loader from "@/components/Loader";
 import Stats from "@/components/Stats";
 import { Button } from "@/components/ui/button";
 import { IStats } from "@/types/stats";
-import {
-  AlertCircle,
-  ArrowDown,
-  CheckCircle,
-  Heart,
-  Trash,
-} from "lucide-react";
+import { AlertCircle, ArrowDown, CheckCircle, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IUSerShow } from "@/types/user";
-import { mockUsers } from "@/constants/users";
+import { PaymentDashBoard } from "@/types/payemnt";
+import { paymentDashboardMocks } from "@/constants/paymentsDashboard";
 
-export default function Users() {
+export default function Payments() {
   const [stats, seTstats] = useState<IStats[]>([]);
   const [load, setLoad] = useState(true);
-  const [users, setUsers] = useState<IUSerShow[]>(mockUsers as IUSerShow[]);
+  const [payments, setPayments] = useState<PaymentDashBoard[]>(
+    paymentDashboardMocks
+  );
   useEffect(() => {
     seTstats([
       {
-        icon: <Heart />,
-        title: "Usuários",
-        value: "1000",
-      },
-      {
-        icon: <CheckCircle />,
-        title: "Usuários activos",
+        icon: <CreditCard />,
+        title: "Pagamentos",
         value: "1000",
       },
       {
         icon: <AlertCircle />,
-        title: "Usuários inadiplemtes",
+        title: "Pagamentos Pendentes",
+        value: "1000",
+      },
+      {
+        icon: <CheckCircle />,
+        title: "Pagamentos Confirmados",
+        value: "1000",
+      },
+      {
+        icon: <AlertCircle />,
+        title: "Pagamentos Cancelados",
         value: "1000",
       },
     ]);
@@ -84,19 +86,23 @@ export default function Users() {
 
   const status = [
     {
-      value: "Activo",
-      label: "Activo",
+      value: "Confirmado",
+      label: "Confirmado",
     },
     {
-      value: "Inadiplentes",
-      label: "Inadiplentes",
+      value: "Pendetes",
+      label: "Pendetes",
     },
     {
-      value: "Desactivo",
-      label: "Desactivo",
+      value: "Cancelados",
+      label: "Cancelados",
+    },
+    {
+      value: "",
+      label: "Todos",
     },
   ];
-  useEffect(() => {}, [users]);
+  useEffect(() => {}, [payments]);
   return (
     <main className="p-3 flex flex-col gap-5">
       {load ? (
@@ -114,11 +120,11 @@ export default function Users() {
             </Button>
           </header>
 
-          <span className="grid gap-4 mt-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-cols-1">
+          <span className="grid gap-4 mt-4 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 grid-cols-1">
             {Array.isArray(stats) &&
               stats.length > 0 &&
               stats.map((item, key) => (
-                <Stats showBtn={false} iskz={false} stats={item} key={key} />
+                <Stats showBtn={false} iskz={true} stats={item} key={key} />
               ))}
           </span>
 
@@ -174,58 +180,60 @@ export default function Users() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="overflow-y-hidden" data-aos="fade-up">
+          <div data-aos="fade-up">
             <Table className="w-full">
-              <TableCaption>Lista dos Passageiros.</TableCaption>
+              <TableCaption>Lista de pagamentos.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead>Foto</TableHead>
                   <TableHead>Nome</TableHead>
                   <TableHead>Número</TableHead>
-                  <TableHead>Créditos</TableHead>
                   <TableHead>Montante</TableHead>
+                  <TableHead>Método</TableHead>
+                  <TableHead>Data</TableHead>
                   <TableHead>Estado</TableHead>
-                  <TableHead>Acção</TableHead>
+                  <TableHead className="text-center">Comprovante</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user, key) => (
+                {payments.map((pay, key) => (
                   <TableRow key={key}>
                     <TableCell>
                       <img
                         className="h-10 w-10 rounded-full object-contain"
-                        src={user.profile}
-                        alt="user Profile"
+                        src={pay?.user?.profile}
+                        alt="pay Profile"
                       />
                     </TableCell>
-                    <TableCell>{user.fullname}</TableCell>
-                    <TableCell>{user.tel}</TableCell>
-                    <TableCell>{user.points}</TableCell>
+                    <TableCell>{pay?.user?.fullname}</TableCell>
+                    <TableCell>{pay?.user?.tel}</TableCell>
                     <TableCell>
-                      {Number(user.cash).toLocaleString("pt")} kz
+                      {Number(pay.amount).toLocaleString("pt")} kz
                     </TableCell>
+                    <TableCell>{pay.method}</TableCell>
+                    <TableCell>{pay.createdAt}</TableCell>
                     <TableCell>
                       <Switch
                         onCheckedChange={() => {
-                          const updatedUsers = users.map((item) =>
-                            item.id === user.id
+                          const updatedUsers = payments.map((item) =>
+                            item.id === pay.id
                               ? {
                                   ...item,
                                   status:
-                                    item.status === "Activo"
-                                      ? ("Desactivo" as "Desactivo")
-                                      : ("Activo" as "Activo"),
+                                    item.status === "Confirmado"
+                                      ? ("Cancelado" as "Cancelado")
+                                      : ("Confirmado" as "Confirmado"),
                                 }
                               : item
                           );
-                          setUsers(updatedUsers);
+                          setPayments(updatedUsers);
                         }}
-                        checked={user.status === "Activo"}
+                        checked={pay.status === "Confirmado"}
                       />
                     </TableCell>
                     <TableCell>
-                      <Button>
-                        <Trash />
+                      <Button className="w-full">
+                        <Download />
                       </Button>
                     </TableCell>
                   </TableRow>

@@ -35,7 +35,7 @@ const items = [
   },
   {
     title: "Pagamentos",
-    url: "/admin",
+    url: "/admin/payments",
     icon: Inbox,
   },
   {

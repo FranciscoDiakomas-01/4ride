@@ -95,7 +95,7 @@ export function AdminBarCharts() {
     },
   ];
   return (
-    <Card>
+    <Card data-aos="fade-up">
       <CardHeader className="flex justify-between lg:flex-row flex-col gap-5">
         <div>
           <CardTitle>Status de Rotas por Mês</CardTitle>
