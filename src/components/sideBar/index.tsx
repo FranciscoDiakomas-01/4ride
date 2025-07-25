@@ -1,5 +1,5 @@
 "use client";
-import { Home, Inbox, Settings, Bell, User, CarTaxiFront ,  } from "lucide-react";
+import {  Inbox, Settings, Bell, User, CarTaxiFront ,  } from "lucide-react";
 
 import {
   Sidebar,
@@ -15,9 +15,12 @@ import Logo from "../Logo";
 import Link from "next/link";
 import { useState } from "react";
 import clsx from "clsx";
-import { mockUsers } from "@/constants/users";
-
 const items = [
+  {
+    title: "Pagamentos",
+    url: "/admin/",
+    icon: Inbox,
+  },
   {
     title: "Passageiros",
     url: "/admin/users",
@@ -28,11 +31,7 @@ const items = [
     url: "/admin/routes",
     icon: CarTaxiFront,
   },
-  {
-    title: "Pagamentos",
-    url: "/admin/payments",
-    icon: Inbox,
-  },
+
   {
     title: "Notificações",
     url: "/admin/notifications",
@@ -47,7 +46,6 @@ const items = [
 
 export function AppSidebar() {
   const [active, setActive] = useState(0);
-  const admin = mockUsers[0];
   return (
     <Sidebar>
       <SidebarContent className="bg-primary text-white ">
@@ -78,12 +76,6 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-
-            <div className="flex gap-3 pt-5">
-              <span>
-                <small className="-mt-1 opacity-80">Administrador do sistema</small>
-              </span>
-            </div>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

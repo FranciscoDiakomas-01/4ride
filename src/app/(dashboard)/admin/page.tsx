@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, CreditCard, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import {
@@ -40,63 +40,107 @@ import Loader from "@/components/Loader";
 import Stats from "@/components/Stats";
 import { Button } from "@/components/ui/button";
 import { IStats } from "@/types/stats";
-import {
-  AlertCircle,
-  ArrowDown,
-  CheckCircle,
-  Heart,
-  Trash,
-} from "lucide-react";
+import { AlertCircle, ArrowDown, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IUSerShow } from "@/types/user";
-import { mockUsers } from "@/constants/users";
+import { PaymentDashBoard } from "@/types/payemnt";
+import { paymentDashboardMocks } from "@/constants/paymentsDashboard";
+import PaymentService from "@/services/api/Payments/payments.service";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function Users() {
+export default function Payments() {
   const [stats, seTstats] = useState<IStats[]>([]);
+  const router = useRouter();
   const [load, setLoad] = useState(true);
-  const [users, setUsers] = useState<IUSerShow[]>(mockUsers as IUSerShow[]);
+  const [payments, setPayments] = useState<any[]>(paymentDashboardMocks);
   useEffect(() => {
     seTstats([
       {
-        icon: <Heart />,
-        title: "Usuários",
-        value: "1000",
-      },
-      {
-        icon: <CheckCircle />,
-        title: "Usuários activos",
+        icon: <CreditCard />,
+        title: "Pagamentos",
         value: "1000",
       },
       {
         icon: <AlertCircle />,
-        title: "Usuários inadiplemtes",
+        title: "Pagamentos Pendentes",
+        value: "1000",
+      },
+      {
+        icon: <CheckCircle />,
+        title: "Pagamentos Confirmados",
+        value: "1000",
+      },
+      {
+        icon: <AlertCircle />,
+        title: "Pagamentos Cancelados",
         value: "1000",
       },
     ]);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.info("Deves estar logado");
+      router.push("/");
+    }
+    async function get() {
+      const service = new PaymentService(token ?? "s");
+      const data = await service.getAllMyPayment();
+      console.log(data);
+      const formatted = data.payments.map((payment) => ({
+        amount: payment.amount,
+        telefone: payment.user?.phone || "Não informado",
+        name: payment.user?.name || "Sem nome",
+        lastname: payment.user?.lastname || "Sem sobrenome",
+        method: payment.method,
+        id: payment.id,
+        file: payment.file,
+        createdAt: new Date(payment.createdAt).toLocaleString("pt-PT", {
+          dateStyle: "short",
+          timeStyle: "short",
+        }),
+        updatedAt: new Date(payment.updatedAt).toLocaleString("pt-PT", {
+          dateStyle: "short",
+          timeStyle: "short",
+        }),
+        status : payment.status
+      }));
+
+      seTstats(data.stats);
+      setPayments(formatted);
+    }
+
+    get();
+    const interval = setInterval(() => {
+      get();
+    }, 3000);
 
     setTimeout(() => {
       setLoad(false);
-    }, 1000);
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  // Função React para download de imagem
+  function downloadImage(url: string, filename = "imagem.jpg") {
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error("Arquivo não encontrado");
+        return res.blob();
+      })
+      .then((blob) => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href); // limpa a memória
+      })
+      .catch((err) => {
+        toast.error("Não foi possível baixar o arquivo.");
+      });
+  }
 
-  const status = [
-    {
-      value: "Activo",
-      label: "Activo",
-    },
-    {
-      value: "Inadiplentes",
-      label: "Inadiplentes",
-    },
-    {
-      value: "Desactivo",
-      label: "Desactivo",
-    },
-  ];
-  useEffect(() => {}, [users]);
+  useEffect(() => {}, [payments]);
   return (
     <main className="p-3 flex flex-col gap-5">
       {load ? (
@@ -105,122 +149,93 @@ export default function Users() {
         </div>
       ) : (
         <>
-          <header
-            data-aos="fade-up"
-            className="flex md:flex-row flex-col justify-end gap-5 md:items-center w-full"
-          >
-            <Button>
-              Exportar dados <ArrowDown />
-            </Button>
-          </header>
-
-          <span className="grid gap-4 mt-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 grid-cols-1">
+          <span className="grid gap-4 mt-4 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 grid-cols-1">
             {Array.isArray(stats) &&
               stats.length > 0 &&
               stats.map((item, key) => (
-                <Stats showBtn={false} iskz={false} stats={item} key={key} />
+                <Stats showBtn={false} iskz={true} stats={item} key={key} />
               ))}
           </span>
 
-          <div data-aos="fade-up" className="mt-4">
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-[300px] justify-between"
-                >
-                  {value
-                    ? status.find((status) => status.value === value)?.label
-                    : "Filtre por estado..."}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[300px] p-0">
-                <Command>
-                  <CommandInput
-                    placeholder="Filtre por estado..."
-                    className="h-9"
-                  />
-                  <CommandList>
-                    <CommandEmpty>No framework found.</CommandEmpty>
-                    <CommandGroup>
-                      {status.map((framework) => (
-                        <CommandItem
-                          key={framework.value}
-                          value={framework.value}
-                          onSelect={(currentValue) => {
-                            setValue(
-                              currentValue === value ? "" : currentValue
-                            );
-                            setOpen(false);
-                          }}
-                        >
-                          {framework.label}
-                          <Check
-                            className={cn(
-                              "ml-auto",
-                              value === framework.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="overflow-y-hidden" data-aos="fade-up">
+          <div data-aos="fade-up">
             <Table className="w-full">
-              <TableCaption>Lista dos Passageiros.</TableCaption>
+              <TableCaption>Lista de pagamentos.</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Foto</TableHead>
-                  <TableHead>Nome</TableHead>
+                  <TableHead>Perfil</TableHead>
+                  <TableHead>Passageiro</TableHead>
                   <TableHead>Número</TableHead>
-                  <TableHead>Créditos</TableHead>
                   <TableHead>Montante</TableHead>
+                  <TableHead>Método</TableHead>
+                  <TableHead>Data</TableHead>
                   <TableHead>Estado</TableHead>
-                  <TableHead>Acção</TableHead>
+                  <TableHead className="text-center">Comprovante</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user, key) => (
+                {payments.map((pay, key) => (
                   <TableRow key={key}>
                     <TableCell>
-                     
+                      <div className="flex h-9 w-9 font-black bg-primary text-white uppercase rounded-full justify-center items-center p-2">
+                        {pay.name?.charAt(0)}
+                        {pay.lastname?.charAt(0)}
+                      </div>
                     </TableCell>
-                    <TableCell>{user.tel}</TableCell>
-                    <TableCell>{user.points}</TableCell>
                     <TableCell>
-                      {Number(user.cash).toLocaleString("pt")} kz
+                      {pay.name} {pay.lastname}
                     </TableCell>
+                    <TableCell>{pay.telefone}</TableCell>
+                    <TableCell>
+                      {Number(pay.amount).toLocaleString("pt")} kz
+                    </TableCell>
+                    <TableCell>{pay.method}</TableCell>
+                    <TableCell>{pay.createdAt}</TableCell>
                     <TableCell>
                       <Switch
-                        onCheckedChange={() => {
-                          const updatedUsers = users.map((item) =>
-                            item.id === user.id
-                              ? {
-                                  ...item,
-                                  status:
-                                    item.status === "Activo"
-                                      ? ("Desactivo" as "Desactivo")
-                                      : ("Activo" as "Activo"),
-                                }
-                              : item
-                          );
-                          setUsers(updatedUsers);
+                        onCheckedChange={async (e) => {
+                          const token = localStorage.getItem("token");
+                          if (!token) {
+                            toast.info("Deves estar logado");
+                            router.push("/");
+                          }
+                          const status = e ? "CONFIRMATED" : "CANCELLED";
+                          const service = new PaymentService(token ?? "");
+                          const data = await service.Update({
+                            paymentid: +pay.id,
+                            status,
+                          });
+                          console.log(data);
+
+                          if (data.updated) {
+                            toast.success("Confirmado com sucesso!");
+                            const updatedUsers = payments.map((item) => {
+                              return item.id == pay.id
+                                ? {
+                                    ...item,
+                                    status:
+                                      item.status === "CONFIRMATED"
+                                        ? ("CANCELLED" as "CANCELLED")
+                                        : ("CONFIRMATED" as "CONFIRMATED"),
+                                  }
+                                : item;
+                            });
+                            setPayments(updatedUsers);
+                            return;
+                          } else {
+                            toast.error(data.message ?? "Ocorreu um erro");
+                          }
                         }}
-                        checked={user.status === "Activo"}
+                        checked={pay.status === "CONFIRMATED"}
                       />
                     </TableCell>
                     <TableCell>
-                      <Button>
-                        <Trash />
+                      <Button
+                        className="w-full"
+                        onClick={() => {
+                          downloadImage(pay.file);
+                        }}
+                      >
+                        <Download />
                       </Button>
                     </TableCell>
                   </TableRow>

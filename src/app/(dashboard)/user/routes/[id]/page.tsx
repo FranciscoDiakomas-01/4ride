@@ -43,7 +43,7 @@ export default function RouterDescription() {
     async function get() {
       if (!token || !myId) {
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       }
       service = new RouteService(token);

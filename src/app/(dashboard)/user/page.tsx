@@ -26,7 +26,7 @@ export default function UserHome() {
       if (!token) {
         console.log(token);
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       } else {
         servive = new UserService(token);

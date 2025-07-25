@@ -3,10 +3,8 @@
 import Loader from "@/components/Loader";
 import Notfound from "@/components/Notfound";
 import NotificationCard from "@/components/NotificationCard";
-import { mockNotifications } from "@/constants/notificatio";
 import NotifiCationService from "@/services/api/Notification/notification.service";
 import INotification from "@/types/notification";
-import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -20,7 +18,7 @@ export default function Notification() {
     async function get() {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/login");
+        router.push("/");
         return;
       }
       service = new NotifiCationService(token);
@@ -42,16 +40,7 @@ export default function Notification() {
 
   return (
     <main className="w-full flex flex-col gap-4">
-      <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945]">
-        <ArrowLeft
-          className="cursor-pointer"
-          onClick={() => {
-            router.back();
-          }}
-        />
-        <h1>Notificações</h1>
-      </span>
-
+ 
       {load ? (
         <div className="flex justify-center min-h-[70dvh] items-center scale-75">
           <Loader type="Spinner" />

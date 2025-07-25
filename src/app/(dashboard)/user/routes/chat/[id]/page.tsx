@@ -76,7 +76,7 @@ export default function GroupChat() {
     if (!token || !userId) {
       toast.error("Você deve estar logado");
       localStorage.clear();
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -100,18 +100,21 @@ export default function GroupChat() {
     });
 
     socketRef.current = socket;
-    socket.emit("join_group", { groupId, userId }, (response: any) => {
-      if (response.status === "joined") {
+
+    socketRef.current.on("connect", () => {
+      socket.emit("join_group", { groupId, userId }, (response: any) => {
+        console.table(response);
         setMessages(response.messages || []);
         setLoad(false);
-      } else {
-        toast.info("Rota lotada!");
-        setTimeout(() => {
-          router.push("/users/routes");
-        });
-      }
+      });
     });
 
+    socketRef.current.on("force_disconnect", (data: any) => {
+      toast.error(data.status ?? data.message ?? "Acesso negado à rota.");
+      setTimeout(() => {
+        router.push("/user/routes");
+      }, 2000);
+    });
     socket.on("new_message", (data: Message) => {
       setMessages((prev) => [...prev, data]);
     });
@@ -124,8 +127,10 @@ export default function GroupChat() {
     });
 
     return () => {
-      socket.disconnect();
-      socketRef.current = null;
+      if (socketRef.current) {
+        socket.disconnect();
+        socketRef.current = null;
+      }
     };
   }, [groupId]);
 

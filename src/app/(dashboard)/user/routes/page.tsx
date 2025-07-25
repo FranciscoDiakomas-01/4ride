@@ -41,7 +41,7 @@ export default function Router() {
     async function get() {
       if (!token || !myId) {
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       }
 
@@ -100,7 +100,7 @@ export default function Router() {
 
     if (!token) {
       toast.error("Você precisa estar logado");
-      router.push("/login");
+      router.push("/");
       return;
     }
 

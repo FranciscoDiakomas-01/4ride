@@ -4,7 +4,7 @@ export interface IPayment {
   message: string;
   id: number | string;
   status: string;
-  createdAt: `${number}, ${string}, ${number}`;
+  createdAt: string;
   amount: number;
   method: string;
   file: string;
@@ -15,10 +15,10 @@ export interface PaymentDashBoard {
   message: string;
   id: number | string;
   status: string;
-  createdAt: `${number}, ${string}, ${number}`;
+  createdAt: string;
   amount: number;
   method: string;
   file: string;
-  user: IUser;
+  user?: IUser;
   updatedAt?: string;
 }

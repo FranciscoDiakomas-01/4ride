@@ -4,7 +4,7 @@ import Loader from "@/components/Loader";
 import Map from "@/components/Map/map";
 import Route from "@/components/Route";
 import { Button } from "@/components/ui/button";
-import { UserRouteAdmin } from "@/components/UserRoute";
+import UserRoute, { UserRouteAdmin } from "@/components/UserRoute";
 import RouteService from "@/services/api/Route/route.service";
 import IRoute from "@/types/route";
 import { useParams, useRouter } from "next/navigation";
@@ -43,7 +43,7 @@ export default function RouterDescription() {
     async function get() {
       if (!token || !myId) {
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       }
       service = new RouteService(token);
@@ -83,7 +83,10 @@ export default function RouterDescription() {
           });
           console.log(data);
           setRoute(formatedRoute);
-          setUsers(data.users);
+          const usersWithouAdmin = data.users.filter((item) => {
+            return item && item.id != myId;
+          })
+          setUsers(usersWithouAdmin);
         } catch (error) {
           toast.error(String(error));
         }
@@ -108,7 +111,7 @@ export default function RouterDescription() {
               <Map from={coord.from} to={coord.to} />
               <div className="flex flex-col gap-4 px-3 ">
                 <h1 className="text-xl font-semibold mt-5">Detalhes</h1>
-                {route && <Route showDescription={false} item={route} />}
+                {route && <Route isAdmin={true} showDescription={false} item={route} />}
 
                 {Array.isArray(users) && users.length > 0 ? (
                   <>

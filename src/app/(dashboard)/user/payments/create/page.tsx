@@ -46,7 +46,7 @@ export default function CreatePayment() {
       if (!token) {
         console.log(token);
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       }
       const paymentService = new PaymentService(token);

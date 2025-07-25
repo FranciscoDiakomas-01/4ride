@@ -9,9 +9,10 @@ import clsx from "clsx";
 interface props {
   item: IRoute;
   showDescription?: boolean;
+  isAdmin ?: boolean
 }
 
-export default function Route({ item, showDescription = true }: props) {
+export default function Route({ item, showDescription = true , isAdmin = false }: props) {
   const router = useRouter();
   return (
     <figure
@@ -39,36 +40,38 @@ export default function Route({ item, showDescription = true }: props) {
         <Image className="h-13 w-13 object-contain" src={car} alt="car" />
       </span>
 
-      <figcaption className="grid grid-cols-2 gap-4">
-        <Button
-          variant={"outline"}
-          className={clsx("w-full  h-[45px] text-md border-0 ", {
-            "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
-              showDescription,
-          })}
-          onClick={() => {
-            const myId = localStorage.getItem("id");
-            if (!myId) {
-              toast.error("Você deve estar logado");
-            } else {
-              toast.success("Bem vindo á rota!");
-              router.push(`/user/routes/chat/${item.id}`);
-            }
-          }}
-        >
-          Entrar no chat
-        </Button>
-        {showDescription && (
+      {!isAdmin && (
+        <figcaption className="grid grid-cols-2 gap-4">
           <Button
-            className="w-full  h-[45px] text-md"
+            variant={"outline"}
+            className={clsx("w-full  h-[45px] text-md border-0 ", {
+              "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
+                showDescription,
+            })}
             onClick={() => {
-              router.push(`/user/routes/${item.id}`);
+              const myId = localStorage.getItem("id");
+              if (!myId) {
+                toast.error("Você deve estar logado");
+              } else {
+                toast.success("Bem vindo á rota!");
+                router.push(`/user/routes/chat/${item.id}`);
+              }
             }}
           >
-            Detalhes
+            Entrar no chat
           </Button>
-        )}
-      </figcaption>
+          {showDescription && (
+            <Button
+              className="w-full  h-[45px] text-md"
+              onClick={() => {
+                router.push(`/user/routes/${item.id}`);
+              }}
+            >
+              Detalhes
+            </Button>
+          )}
+        </figcaption>
+      )}
     </figure>
   );
 }
@@ -114,17 +117,6 @@ export function RouteAdmin({ item, showDescription = true }: props) {
         >
           Detalhes
         </Button>
-      )}
-      {!showDescription && (
-        <Switch
-          onCheckedChange={() => {
-            setRout((prev) => ({
-              ...prev,
-              status: prev.status == "Aberta" ? "Fechada" : "Aberta",
-            }));
-          }}
-          checked={rout.status == "Aberta"}
-        />
       )}
     </figure>
   );

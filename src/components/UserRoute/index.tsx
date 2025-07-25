@@ -81,22 +81,6 @@ export function UserRouteAdmin({ user, route, createdAt }: prop) {
         </div>
       </div>
 
-      <Button
-        variant={"outline"}
-        className="text-primary font-normal lg:w-[50%] w-full"
-        onClick={() => {
-          const id = `user-${user.id}`;
-
-          const element = document.getElementById(id);
-
-          if (element) {
-            element.style.display = "none";
-          }
-        }}
-      >
-        Remover da rota
-        <Trash />
-      </Button>
     </figure>
   );
 }

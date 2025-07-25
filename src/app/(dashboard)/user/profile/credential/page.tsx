@@ -40,7 +40,7 @@ export default function UserNumber() {
       if (!token) {
         console.log(token);
         toast.error("Você precisa estar logado");
-        router.push("/login");
+        router.push("/");
         return;
       } else {
         setProceccing(true);

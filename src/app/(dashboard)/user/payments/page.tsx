@@ -20,7 +20,7 @@ export default function Profile() {
     async function get() {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/login");
+        router.push("/");
         return;
       }
       const service = new PaymentService(token);

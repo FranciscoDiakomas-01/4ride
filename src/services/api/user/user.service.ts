@@ -29,7 +29,7 @@ export default class UserService {
         message: "Erro ao criar conta",
         token: "",
         role: "",
-        id : ""
+        id: "",
       };
     }
   }
@@ -57,7 +57,7 @@ export default class UserService {
         message: "Erro ao criar conta",
         token: "",
         role: "",
-        id : ""
+        id: "",
       };
     }
   }
@@ -90,13 +90,41 @@ export default class UserService {
       };
     }
   }
+
+  public async getAllUsers() {
+    try {
+      const response = await fetch(`${server}/users`, {
+        headers: {
+          "Content-Type": "application/json",
+          token: this.token,
+        },
+      });
+      const data = (await response.json()) as {
+        message: string;
+        users: any[];
+        total: string
+        confirmated: string
+        pendings: string
+      };
+      return data;
+    } catch (error) {
+      console.log(error);
+      return {
+        message: "Erro ao pegar seus dados!",
+        users: [] as any[],
+        total: "0",
+        confirmated: "0",
+        pendings : "0"
+      };
+    }
+  }
   public async updateProfile(body: { name: string; lastname: string }) {
     try {
       const response = await fetch(`${server}/users/name`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "token" : this.token
+          token: this.token,
         },
         body: JSON.stringify(body),
       });

@@ -35,7 +35,7 @@ export default function InitialScreen() {
             data-aos="fade-left"
             className="text-primary  h-[45px] border-primary font-semibold bg-white w-full rounded-[8px]"
             onClick={() => {
-              router.push("/login");
+              router.push("/");
             }}
           >
             Acessar conta

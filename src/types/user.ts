@@ -1,12 +1,10 @@
 
 export default interface IUser {
-  id: string | number
-  fullname: string
-  tel: string
-  profile: string
-  status?: "Activo" | "Desactivo" 
-  points?: number
-  cash ?: number
+  id: string | number;
+  name: string;
+  lastname: string;
+  telefone: string;
+  points?: number;
 }
 
 

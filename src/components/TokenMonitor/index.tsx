@@ -12,14 +12,14 @@ export default function TokenMonitor() {
 
     if (!token) {
       toast.warning("Token ausente, redirecionando...");
-      router.push("/login");
+      router.push("/");
     }
 
     const interval = setInterval(() => {
       const token = localStorage.getItem("token");
       if (!token) {
         toast.warning("Token expirou, redirecionando...");
-        router.push("/login");
+        router.push("/");
       }
     }, 1000);
 

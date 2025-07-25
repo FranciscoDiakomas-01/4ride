@@ -53,7 +53,7 @@ export default function UserLayout({
     async function get() {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/login");
+        router.push("/");
         return;
       }
       service = new NotifiCationService(token);
