@@ -1,1 +1,1 @@
-export default "http://localhost:8080/fourride" as const
+export default "https://rouride-backend.onrender.com/fourride" as const;

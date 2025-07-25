@@ -74,7 +74,7 @@ export default function GroupChat() {
 
     if (!groupId) return;
 
-    const socket = io("http://localhost:8080", {
+    const socket = io("https://rouride-backend.onrender.com/", {
       transports: ["websocket"],
     });
 
