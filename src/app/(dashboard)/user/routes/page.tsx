@@ -177,12 +177,11 @@ export default function Router() {
                       id="from"
                       name="from"
                       required
-                      defaultValue="Viana"
                     />
                   </div>
                   <div className="grid gap-3">
                     <Label htmlFor="to">Distrito de destino</Label>
-                    <Input id="to" name="to" required defaultValue="Cacuaco" />
+                    <Input id="to" name="to" required/>
                   </div>
                 </div>
                 <DialogFooter className="mt-4">

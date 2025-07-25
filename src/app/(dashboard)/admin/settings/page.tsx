@@ -85,7 +85,7 @@ export default function Profile() {
     get();
     setTimeout(() => {
       setLoad(false);
-    }, 3000);
+    }, 1000);
   }, []);
 
   return (

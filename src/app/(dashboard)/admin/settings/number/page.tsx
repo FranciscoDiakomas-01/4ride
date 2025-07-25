@@ -20,7 +20,7 @@ export default function UserNumber() {
   useEffect(() => {
     setTimeout(() => {
       setLoad(false);
-    }, 3000);
+    }, 1000);
   }, []);
 
   async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {

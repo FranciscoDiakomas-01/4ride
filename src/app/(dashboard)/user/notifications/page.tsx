@@ -32,9 +32,9 @@ export default function Notification() {
       get();
     }, 3000);
 
-    setTimeout(() => {
+   setTimeout(() => {
       setLoad(false);
-    }, 3000);
+    }, 1000);
     return () => {
       clearInterval(interval);
     };

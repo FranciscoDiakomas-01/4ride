@@ -34,7 +34,7 @@ export default function Notification() {
 
     setTimeout(() => {
       setLoad(false);
-    }, 3000);
+    }, 1000);
     return () => {
       clearInterval(interval);
     };

@@ -29,7 +29,7 @@ export default function Home() {
         return;
       }
       setLoad(false);
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, []);

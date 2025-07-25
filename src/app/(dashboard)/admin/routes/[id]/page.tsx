@@ -90,7 +90,7 @@ export default function RouterDescription() {
       }
     }
     get();
-    const timeout = setTimeout(() => setLoad(false), 3000);
+    const timeout = setTimeout(() => setLoad(false), 1000);
     return () => {
       clearTimeout(timeout);
     };

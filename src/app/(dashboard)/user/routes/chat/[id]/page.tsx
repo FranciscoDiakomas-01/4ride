@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 interface Notification {
   message: string;
   timestamp: string;
@@ -45,6 +46,26 @@ export default function GroupChat() {
   const [input, setInput] = useState("");
   const [me, setMe] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [selectedTaxi, setSelectedTaxi] = useState("Yango");
+  const [load, setLoad] = useState(true);
+  const taxis = [
+    {
+      icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Yango_Logo.png",
+      name: "Yango",
+    },
+    {
+      icon: "https://globaluploads.webflow.com/631f3c4a06c338220369dcdd/63205b96f2c7ec2e0e21885a_kubinga.jpg",
+      name: "Kubinga",
+    },
+    {
+      icon: "https://media.licdn.com/dms/image/C4D0BAQEj3lAeWy7bnw/company-logo_200_200/0/1630557452193?e=2147483647&v=beta&t=yduM7I5QMn4oCyhwk5I9epT6GBgxDY3IEGB9LeSTCeA",
+      name: "Heetch",
+    },
+    {
+      icon: "https://pbs.twimg.com/profile_images/1264899078380312578/r3yyQUeh_400x400.jpg",
+      name: "T´Leva",
+    },
+  ];
 
   const groupId = Number(id);
 
@@ -79,10 +100,15 @@ export default function GroupChat() {
     });
 
     socketRef.current = socket;
-
     socket.emit("join_group", { groupId, userId }, (response: any) => {
       if (response.status === "joined") {
         setMessages(response.messages || []);
+        setLoad(false);
+      } else {
+        toast.info("Rota lotada!");
+        setTimeout(() => {
+          router.push("/users/routes");
+        });
       }
     });
 
@@ -93,13 +119,8 @@ export default function GroupChat() {
     socket.on("notification", (data: Notification) => {
       toast.info(`📢 ${data.message}`);
     });
-
     socket.on("route_ended", (data: Notification) => {
       toast.info(`❌ ${data.message}`);
-      socket.disconnect();
-      setTimeout(() => {
-        router.push("/user/routes");
-      }, 1000);
     });
 
     return () => {
@@ -130,163 +151,177 @@ export default function GroupChat() {
 
   return (
     <div className="flex flex-col h-[85dvh]">
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {messages.map((msg, index) => {
-          const key = msg?.id || `${msg?.senderid || "local"}-${index}`;
-          const isMine = msg.senderid === me?.id;
-          const senderName = `${msg?.User?.name ?? ""} ${
-            msg?.User?.lastname ?? ""
-          }`;
-          const senderInitials = `${msg?.User?.name?.[0] ?? ""}${
-            msg?.User?.lastname?.[0] ?? ""
-          }`.toUpperCase();
+      {!load && (
+        <>
+          {" "}
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            {messages.map((msg, index) => {
+              const key = msg?.id || `${msg?.senderid || "local"}-${index}`;
+              const isMine = msg.senderid === me?.id;
+              const senderName = `${msg?.User?.name ?? ""} ${
+                msg?.User?.lastname ?? ""
+              }`;
+              const senderInitials = `${msg?.User?.name?.[0] ?? ""}${
+                msg?.User?.lastname?.[0] ?? ""
+              }`.toUpperCase();
 
-          const rawDate = msg.createdAt ? new Date(msg.createdAt) : new Date();
-          const formattedDate = !isNaN(rawDate.getTime())
-            ? rawDate.toLocaleDateString()
-            : "";
-          const formattedTime = !isNaN(rawDate.getTime())
-            ? rawDate.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "";
+              const rawDate = msg.createdAt
+                ? new Date(msg.createdAt)
+                : new Date();
+              const formattedDate = !isNaN(rawDate.getTime())
+                ? rawDate.toLocaleDateString()
+                : "";
+              const formattedTime = !isNaN(rawDate.getTime())
+                ? rawDate.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "";
 
-          return (
-            <div
-              key={key}
-              className={`flex items-start gap-2 mb-4 ${
-                isMine ? "justify-end" : "justify-start"
-              }`}
-            >
-              {!isMine && (
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 bg-primary text-white flex items-center justify-center rounded-full font-bold text-sm">
-                    {senderInitials}
-                  </div>
-                </div>
-              )}
-
-              <div
-                className={`max-w-xs text-sm ${
-                  isMine ? "text-right" : "text-left"
-                }`}
-              >
-                {!isMine && (
-                  <div className="mb-1">
-                    <div className="text-xs font-semibold text-gray-700">
-                      {senderName}
-                    </div>
-                    <div className="text-[10px] text-gray-500">
-                      {formattedDate} às {formattedTime}
-                    </div>
-                  </div>
-                )}
-
+              return (
                 <div
-                  className={`p-3 rounded-lg ${
-                    isMine
-                      ? "bg-primary text-white rounded-br-none"
-                      : "bg-gray-200 text-gray-900 rounded-bl-none"
+                  key={key}
+                  className={`flex items-start gap-2 mb-4 ${
+                    isMine ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {msg.message}
-                  {isMine && (
-                    <div className="text-[10px] text-white opacity-70 mt-1">
-                      {formattedTime}
+                  {!isMine && (
+                    <div className="flex flex-col items-center">
+                      <div className="w-10 h-10 bg-primary text-white flex items-center justify-center rounded-full font-bold text-sm">
+                        {senderInitials}
+                      </div>
                     </div>
                   )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-        <div ref={messagesEndRef} />
-      </div>
 
-      <div className="p-4 border-t bg-white  gap-2 flex md:flex-row flex-col">
-        <Input
-          className="flex-1 border rounded px-4 py-2"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Digite sua mensagem..."
-        />
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            className="bg-primary w-full text-white px-4 py-2 rounded"
-            onClick={sendMessage}
-          >
-            Enviar
-          </Button>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant={"outline"} className="w-full">
-                Finalizar rota
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Escolhe o Táxi</DialogTitle>
-                <DialogDescription>
-                  Antes de finalizar garanta que todos os outros passageiros
-                  estejem cientes do acto para evitar constrangimento
-                </DialogDescription>
-              </DialogHeader>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  socketRef.current &&
-                    socketRef.current.emit(
-                      "end_route",
-                      {
-                        groupId,
-                        userid: me.id,
-                      },
-                      (response: any) => {
-                        if (response.status == "Finalizada") {
-                          toast.success("Rota finalizada");
-                          setTimeout(() => {
-                            router.push("/user/routes");
-                          }, 1000);
-                        } else {
-                          toast.success("Erro ao Rota finalizada");
-                          return;
-                        }
-                      }
-                    );
-                }}
-              >
-                <div className="grid gap-4">
-                  <div className="grid gap-3">
-                    <Label htmlFor="from">Provedor do Táxi</Label>
-                    <Input
-                      id="from"
-                      name="from"
-                      required
-                      defaultValue="YANGO"
-                    />
+                  <div
+                    className={`max-w-xs text-sm ${
+                      isMine ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {!isMine && (
+                      <div className="mb-1">
+                        <div className="text-xs font-semibold text-gray-700">
+                          {senderName}
+                        </div>
+                        <div className="text-[10px] text-gray-500">
+                          {formattedDate} às {formattedTime}
+                        </div>
+                      </div>
+                    )}
+
+                    <div
+                      className={`p-3 rounded-lg ${
+                        isMine
+                          ? "bg-primary text-white rounded-br-none"
+                          : "bg-gray-200 text-gray-900 rounded-bl-none"
+                      }`}
+                    >
+                      {msg.message}
+                      {isMine && (
+                        <div className="text-[10px] text-white opacity-70 mt-1">
+                          {formattedTime}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <DialogFooter className="mt-4">
-                  <DialogClose asChild>
-                    <Button variant="outline" type="button">
-                      Cancelar
-                    </Button>
-                  </DialogClose>
-                  <Button type="submit" disabled={processing}>
-                    {processing ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <>Finalizar</>
-                    )}
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="p-4 border-t bg-white  gap-2 flex md:flex-row flex-col">
+            <Input
+              className="flex-1 border rounded px-4 py-2"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              placeholder="Digite sua mensagem..."
+            />
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                className="bg-primary w-full text-white px-4 py-2 rounded"
+                onClick={sendMessage}
+              >
+                Enviar
+              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant={"outline"} className="w-full">
+                    Finalizar rota
                   </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle> Escolha o serviço de táxi</DialogTitle>
+                    <DialogDescription>
+                      Antes de finalizar garanta que todos os outros passageiros
+                      estejem cientes do acto para evitar constrangimento
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      socketRef.current &&
+                        socketRef.current.emit(
+                          "end_route",
+                          {
+                            groupId,
+                            userid: me.id,
+                            name: `${me.name} ${me.lastname}`,
+                            taxi: selectedTaxi,
+                          },
+                          (response: any) => {
+                            if (response.status == "Finalizada") {
+                              toast.success("Chamando um taxi");
+                              setTimeout(() => {
+                                router.push("/user/routes");
+                              }, 1000);
+                            } else {
+                              toast.success("Erro ao finalizar a Rota");
+                              return;
+                            }
+                          }
+                        );
+                    }}
+                  >
+                    <RadioGroup
+                      defaultValue={selectedTaxi}
+                      onValueChange={setSelectedTaxi}
+                      className="grid gap-4 sm:grid-cols-2"
+                    >
+                      {taxis.map((taxi) => (
+                        <label
+                          key={taxi.name}
+                          className="flex items-center gap-4 border p-4 rounded-xl cursor-pointer hover:shadow-md transition duration-200"
+                        >
+                          <RadioGroupItem value={taxi.name} id={taxi.name} />
+
+                          <span className="font-medium">{taxi.name}</span>
+                        </label>
+                      ))}
+                    </RadioGroup>
+
+                    <DialogFooter className="mt-4">
+                      <DialogClose asChild>
+                        <Button variant="outline" type="button">
+                          Cancelar
+                        </Button>
+                      </DialogClose>
+                      <Button type="submit" disabled={processing}>
+                        {processing ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          <>Finalizar</>
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -76,7 +76,7 @@ export default function Users() {
 
     setTimeout(() => {
       setLoad(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   const [open, setOpen] = useState(false);

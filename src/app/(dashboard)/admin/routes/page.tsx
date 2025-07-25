@@ -56,7 +56,7 @@ export default function Users() {
      setLoad(true);
      setTimeout(() => {
        setLoad(false);
-     }, 3000);
+     }, 1000);
    }, [active]);
   return (
     <main className="p-3 flex flex-col gap-5">

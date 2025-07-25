@@ -45,7 +45,7 @@ export default function UserHome() {
     get();
     setTimeout(() => {
       setLoad(false);
-    }, 3000);
+    }, 1000);
   }, []);
   return (
     <main className="w-full overflow-x-hidden flex flex-col gap-3 p-4 pt-8 pb-30">
