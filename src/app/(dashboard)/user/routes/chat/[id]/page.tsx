@@ -272,10 +272,6 @@ export default function GroupChat() {
                           },
                           (response: any) => {
                             if (response.status == "Finalizada") {
-                              toast.success("Chamando um taxi");
-                              setTimeout(() => {
-                                router.push("/user/routes");
-                              }, 1000);
                             } else {
                               toast.success("Erro ao finalizar a Rota");
                               return;
