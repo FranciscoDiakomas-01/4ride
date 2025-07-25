@@ -5,7 +5,7 @@ import clsx from "clsx";
 
 interface prop {
   message: IMessage;
-  user: IUser;
+  user: any;
 }
 export default function Message({ message, user }: prop) {
   return (
@@ -30,7 +30,7 @@ export default function Message({ message, user }: prop) {
         )}
       >
         {message.type != "my" && (
-          <h1 className="font-semibold text-md">{user.fullname}</h1>
+          <h1 className="font-semibold text-md">{user.name}</h1>
         )}
         <div>{message.message}</div>
         <small className="text-gray-500 text-[12px]">
