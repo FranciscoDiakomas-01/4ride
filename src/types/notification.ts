@@ -4,6 +4,7 @@ export default interface INotification {
   message: string;
   read: boolean;
   title: string;
-  type: "ALERT" | "PAYMENT" | "ROUTE";
+  type: string;
   updatedAt: Date;
+  date ?: string
 }

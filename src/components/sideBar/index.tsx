@@ -80,9 +80,7 @@ export function AppSidebar() {
             </SidebarMenu>
 
             <div className="flex gap-3 pt-5">
-              <img className="h-9.5 w-9.5 object-contain rounded-full"  src={admin.profile} alt="Admin profile" />
               <span>
-                <h1 className="text-md font-semibold">{admin.fullname}</h1>
                 <small className="-mt-1 opacity-80">Administrador do sistema</small>
               </span>
             </div>

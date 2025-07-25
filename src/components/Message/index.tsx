@@ -18,12 +18,6 @@ export default function Message({ message, user }: prop) {
         }
       )}
     >
-      <img
-        src={user.profile}
-        className={clsx("h-10 w-10 rounded-full object-contain ", {
-          hidden: message.type == "my",
-        })}
-      />
       <span
         className={clsx(
           "flex flex-col gap-2 p-2 border  rounded-sm",

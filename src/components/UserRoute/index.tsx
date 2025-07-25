@@ -55,28 +55,20 @@ export function UserRouteAdmin({ user, route, createdAt }: prop) {
       className="flex flex-col gap-3 border border-primary p-3 rounded-md"
     >
       <span className="flex gap-2">
-        <img
-          width={60}
-          height={60}
-          className="rounded-md"
-          src={user.profile}
-          alt={user.fullname}
-        />
+        <div className="flex justify-center items-center p-2  bg-primary uppercase  text-white font-black rounded-full">
+          {user.name?.charAt(0)} {user.lastname?.charAt(0)}
+        </div>
         <span className="flex flex-col">
-          <h1 className="text-md font-semibold">{user.fullname}</h1>
-          <small className="text-sm text-gray-500">{user.tel}</small>
-          {user.status == "Activo" && (
-            <div className="flex justify-center items-center p-1 rounded-sm text-[12px] bg-primary text-white w-4.5 h-4.5">
-              <Verified size={15} />
-            </div>
-          )}
+          <h1 className="text-md font-semibold">
+            {user.name} {user.lastname}
+          </h1>
         </span>
       </span>
 
       <div className="flex gap-2  items-start h-15 overflow-hidden text-gray-600">
         <Image src={stars} alt="stars" className="h-full object-contain" />
         <div className="flex justify-between flex-col h-full">
-          <p>{createdAt}</p>
+          <p>{user.telefone}</p>
           <p>{route.from + " - " + route.to}</p>
         </div>
       </div>
@@ -84,8 +76,8 @@ export function UserRouteAdmin({ user, route, createdAt }: prop) {
       <div className="flex gap-2 -mt-2 items-start h-15 overflow-hidden text-gray-600">
         <Image src={stars} alt="stars" className="h-full object-contain" />
         <div className="flex justify-between flex-col h-full">
-          <p>{Number(user.cash).toLocaleString("pt")} kz de crédito</p>
-          <p>{user.points} Pontos</p>
+          <p>{Number(user.points).toLocaleString("pt")} kz de crédito</p>
+          <p>{Number(user.points) > 0 ? Number(user.points)/50 : 0} Pontos</p>
         </div>
       </div>
 

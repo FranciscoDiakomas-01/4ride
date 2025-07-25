@@ -199,13 +199,8 @@ export default function Payments() {
                 {payments.map((pay, key) => (
                   <TableRow key={key}>
                     <TableCell>
-                      <img
-                        className="h-10 w-10 rounded-full object-contain"
-                        src={pay?.user?.profile}
-                        alt="pay Profile"
-                      />
+                      
                     </TableCell>
-                    <TableCell>{pay?.user?.fullname}</TableCell>
                     <TableCell>{pay?.user?.tel}</TableCell>
                     <TableCell>
                       {Number(pay.amount).toLocaleString("pt")} kz

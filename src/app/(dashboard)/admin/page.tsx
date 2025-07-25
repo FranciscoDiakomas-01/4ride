@@ -192,13 +192,8 @@ export default function Users() {
                 {users.map((user, key) => (
                   <TableRow key={key}>
                     <TableCell>
-                      <img
-                        className="h-10 w-10 rounded-full object-contain"
-                        src={user.profile}
-                        alt="user Profile"
-                      />
+                     
                     </TableCell>
-                    <TableCell>{user.fullname}</TableCell>
                     <TableCell>{user.tel}</TableCell>
                     <TableCell>{user.points}</TableCell>
                     <TableCell>
