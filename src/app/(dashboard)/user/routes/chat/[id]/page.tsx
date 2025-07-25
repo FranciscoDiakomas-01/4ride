@@ -287,12 +287,12 @@ export default function GroupChat() {
                     <RadioGroup
                       defaultValue={selectedTaxi}
                       onValueChange={setSelectedTaxi}
-                      className="grid gap-4 sm:grid-cols-2"
+                      className="grid gap-4 grid-cols-2"
                     >
                       {taxis.map((taxi) => (
                         <label
                           key={taxi.name}
-                          className="flex items-center gap-4 border p-4 rounded-xl cursor-pointer hover:shadow-md transition duration-200"
+                          className="flex items-center gap-4 border p-2 rounded-xl cursor-pointer hover:shadow-md transition duration-200"
                         >
                           <RadioGroupItem value={taxi.name} id={taxi.name} />
 
