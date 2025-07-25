@@ -204,7 +204,7 @@ export default function GroupChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="px-4 py-2 border-t bg-white flex gap-2">
+      <div className="p-4 border-t bg-white  gap-2 flex md:flex-row flex-col">
         <Input
           className="flex-1 border rounded px-4 py-2"
           value={input}
@@ -212,16 +212,18 @@ export default function GroupChat() {
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Digite sua mensagem..."
         />
-        <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <Button
-            className="bg-primary text-white px-4 py-2 rounded"
+            className="bg-primary w-full text-white px-4 py-2 rounded"
             onClick={sendMessage}
           >
             Enviar
           </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant={"outline"}>Finalizar rota</Button>
+              <Button variant={"outline"} className="w-full">
+                Finalizar rota
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
