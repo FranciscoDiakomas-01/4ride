@@ -7,7 +7,18 @@ import { toast } from "sonner";
 import UserService from "@/services/api/user/user.service";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 interface Notification {
   message: string;
   timestamp: string;
@@ -26,6 +37,8 @@ interface Message {
 
 export default function GroupChat() {
   const { id } = useParams();
+
+  const [processing, setProcessing] = useState(false);
   const router = useRouter();
   const socketRef = useRef<Socket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -84,6 +97,9 @@ export default function GroupChat() {
     socket.on("route_ended", (data: Notification) => {
       toast.info(`❌ ${data.message}`);
       socket.disconnect();
+      setTimeout(() => {
+        router.push("/user/routes");
+      }, 1000);
     });
 
     return () => {
@@ -104,9 +120,9 @@ export default function GroupChat() {
       userId: me.id,
       message: input.trim(),
       User: {
-        name : me.name,
-        lastname : me.lastname
-      }
+        name: me.name,
+        lastname: me.lastname,
+      },
     });
 
     setInput("");
@@ -203,15 +219,70 @@ export default function GroupChat() {
           >
             Enviar
           </Button>
-          <Button
-            type="button"
-            variant={"outline"}
-            onClick={() => {
-              router.push(`user/routes/cancel/${Number(id)}`)
-            }}
-          >
-            Finalizar
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"outline"}>Finalizar rota</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Escolhe o Táxi</DialogTitle>
+                <DialogDescription>
+                  Antes de finalizar garanta que todos os outros passageiros
+                  estejem cientes do acto para evitar constrangimento
+                </DialogDescription>
+              </DialogHeader>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  socketRef.current &&
+                    socketRef.current.emit(
+                      "end_route",
+                      {
+                        groupId,
+                        userid: me.id,
+                      },
+                      (response: any) => {
+                        if (response.status == "Finalizada") {
+                          toast.success("Rota finalizada");
+                          setTimeout(() => {
+                            router.push("/user/routes");
+                          }, 1000);
+                        } else {
+                          toast.success("Erro ao Rota finalizada");
+                          return;
+                        }
+                      }
+                    );
+                }}
+              >
+                <div className="grid gap-4">
+                  <div className="grid gap-3">
+                    <Label htmlFor="from">Provedor do Táxi</Label>
+                    <Input
+                      id="from"
+                      name="from"
+                      required
+                      defaultValue="YANGO"
+                    />
+                  </div>
+                </div>
+                <DialogFooter className="mt-4">
+                  <DialogClose asChild>
+                    <Button variant="outline" type="button">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <Button type="submit" disabled={processing}>
+                    {processing ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <>Finalizar</>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
