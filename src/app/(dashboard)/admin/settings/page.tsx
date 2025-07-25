@@ -36,12 +36,6 @@ export default function Profile() {
       to: "/admin/settings/credential",
     },
     {
-      icon: <Settings />,
-      title: "Preferências",
-      description: "Altere e veja as preferências do sistema",
-      to: "/admin/settings/preference",
-    },
-    {
       icon: <LogOutIcon />,
       title: "Sair",
       description: "Terminar a sessão e sair da plataforma.",

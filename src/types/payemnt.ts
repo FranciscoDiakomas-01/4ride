@@ -3,21 +3,22 @@ import IUser from "./user";
 export interface IPayment {
   message: string;
   id: number | string;
-  status: "Pendente" | "Confirmado" | "Cancelado";
+  status: string;
   createdAt: `${number}, ${string}, ${number}`;
   amount: number;
-  method: "Express" | "Referência" | "Transferência";
+  method: string;
   file: string;
+  updatedAt?: string;
 }
-
 
 export interface PaymentDashBoard {
   message: string;
   id: number | string;
-  status: "Pendente" | "Confirmado" | "Cancelado";
+  status: string;
   createdAt: `${number}, ${string}, ${number}`;
   amount: number;
-  method: "Express" | "Referência" | "Transferência";
+  method: string;
   file: string;
-  user : IUser
+  user: IUser;
+  updatedAt?: string;
 }

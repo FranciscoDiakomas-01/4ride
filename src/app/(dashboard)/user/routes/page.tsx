@@ -1,80 +1,209 @@
 "use client";
 
 import Loader from "@/components/Loader";
+import Notfound from "@/components/Notfound";
 import Route from "@/components/Route";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockRoutes } from "@/constants/routes.mock";
+import RouteService from "@/services/api/Route/route.service";
 import IRoute from "@/types/route";
-import { ArrowLeftIcon, Search } from "lucide-react";
+import { ArrowLeftIcon, ArrowUp, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 export default function Router() {
   const [load, setLoad] = useState(true);
-  const [routes, setRoutes] = useState<IRoute[]>(mockRoutes);
+  const [fromFilter, setFromFilter] = useState("");
+  const [toFilter, setToFilter] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [routes, setRoutes] = useState<IRoute[]>([]);
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  let service: RouteService;
 
   useEffect(() => {
-    setLoad(true);
+    const myId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    async function get() {
+      if (!token || !myId) {
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      }
+
+      service = new RouteService(token);
+      const data = await service.getAllActivesRoute();
+
+      if (!data.fouded) {
+        toast.error(data.message);
+        return;
+      }
+
+      const formated = data.routes.map((item) => ({
+        date: item.createdAt,
+        distance: item.way,
+        from: item.from,
+        to: item.to,
+        id: item.id,
+        status: item.status,
+        users: item.users.length,
+      })) as IRoute[];
+
+      setRoutes(formated);
+    }
+
+    get();
+    const interval = setInterval(get, 3000);
+    const timeout = setTimeout(() => setLoad(false), 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  const filteredRoutes = routes.filter((route) => {
+    const fromMatch = route.from
+      .toLowerCase()
+      .includes(fromFilter.toLowerCase().trim());
+    const toMatch = route.to
+      .toLowerCase()
+      .includes(toFilter.toLowerCase().trim());
+    return fromMatch && toMatch;
+  });
+
+  async function handelOnsubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formadata = new FormData(e.currentTarget);
+    const from = formadata.get("from") as string;
+    const to = formadata.get("to") as string;
+    const token = localStorage.getItem("token");
+
+    if (!to || !from) {
+      toast.error("Preencha todos os campos");
+      return;
+    }
+
+    if (!token) {
+      toast.error("Você precisa estar logado");
+      router.push("/login");
+      return;
+    }
+
+    setProcessing(true);
+    service = new RouteService(token);
+    const data = await service.createRoute({ from, to });
+
+    if (data?.creaed) {
+      toast.success(data.message);
+      router.push(`/user/routes/${data.routeid}`);
+    } else {
+      toast.error(data.message);
+    }
 
     setTimeout(() => {
-      setLoad(false);
-    }, 3000);
-  }, []);
-  const router = useRouter();
+      setProcessing(false);
+    }, 1000);
+  }
+
   return (
-    <main className="flex flex-col gap-9 ">
+    <main className="flex flex-col gap-9 pb-32">
       <div className="bg-white shadow p-4 py-5 sticky top-0 flex gap-3 items-center z-[95945]">
         <ArrowLeftIcon
           className="cursor-pointer"
-          onClick={() => {
-            router.back();
-          }}
+          onClick={() => router.back()}
         />
         <p className="font-semibold">Grupos de Rotas</p>
       </div>
-      <form action="" className="px-3 flex flex-col gap-4">
-        <div
-          className="flex gap-2 border-1 p-1.5 rounded-md"
-          data-aos="fade-right"
-        >
-          <div
-            className="flex justify-center items-center rounded-full
-            bg-gray-100 p-2 text-gray-600"
-          >
+
+      <form className="px-3 flex lg:flex-row flex-col gap-4">
+        <div className="flex gap-2 border-1 p-1.5 rounded-md">
+          <div className="flex justify-center items-center rounded-full bg-gray-100 p-2 text-gray-600">
             <Search size={17} />
           </div>
           <Input
             placeholder="Localização"
-            id="location"
-            name="location"
-            type="text"
-            className="w-full h-full border-0 shadow-none outline-0 outline-none"
+            name="fromFilter"
+            value={fromFilter}
+            onChange={(e) => setFromFilter(e.target.value)}
+            className="w-full h-full border-0 shadow-none outline-0"
           />
         </div>
-        <span
-          data-aos="fade-right"
-          className="flex items-center gap-4 justify-between"
-        >
+
+        <span className="flex items-center gap-4 justify-between">
           <div className="flex gap-2 border-1 p-1.5 rounded-md w-[85%]">
-            <div
-              className="flex justify-center items-center rounded-full
-            bg-gray-100 p-2 text-gray-600"
-            >
+            <div className="flex justify-center items-center rounded-full bg-gray-100 p-2 text-gray-600">
               <Search size={17} />
             </div>
-
             <Input
-              placeholder="Localização"
-              id="location"
-              name="location"
-              type="text"
-              className="w-full h-full border-0 shadow-none outline-0 outline-none"
+              placeholder="Destino"
+              name="toFilter"
+              value={toFilter}
+              onChange={(e) => setToFilter(e.target.value)}
+              className="w-full h-full border-0 shadow-none outline-0"
             />
           </div>
-          <Button className="w-[15%]">
-            <Search />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Criar rota</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Criar rota</DialogTitle>
+                <DialogDescription>
+                  Crie rota, para que os próximos usuários com mesmo destino te
+                  encontrem
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handelOnsubmit}>
+                <div className="grid gap-4">
+                  <div className="grid gap-3">
+                    <Label htmlFor="from">Distrito atual</Label>
+                    <Input
+                      id="from"
+                      name="from"
+                      required
+                      defaultValue="Viana"
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="to">Distrito de destino</Label>
+                    <Input id="to" name="to" required defaultValue="Cacuaco" />
+                  </div>
+                </div>
+                <DialogFooter className="mt-4">
+                  <DialogClose asChild>
+                    <Button variant="outline" type="button">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <Button type="submit" disabled={processing}>
+                    {processing ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <>
+                        Publicar <ArrowUp className="rotate-40" />
+                      </>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </span>
       </form>
 
@@ -84,14 +213,72 @@ export default function Router() {
         </div>
       ) : (
         <aside className="px-3">
-          {Array.isArray(routes) && routes.length > 0 ? (
-            <div className="grid xl:grid-cols-3 gap-6 lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 mb-30 ">
-              {routes.map((item, key) => (
+          {filteredRoutes.length > 0 ? (
+            <div className="grid xl:grid-cols-3 gap-6 lg:grid-cols-2 sm:grid-cols-1">
+              {filteredRoutes.map((item, key) => (
                 <Route item={item} key={key} />
               ))}
             </div>
           ) : (
-            <></>
+            <div className="flex flex-col gap-2 justify-center items-center">
+              <Notfound
+                message="Não há rotas activas com esses critérios. Deseja criar uma?"
+                onclick={() => setOpen(true)}
+                buttonLabel=""
+              />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">Criar rota</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Criar rota</DialogTitle>
+                    <DialogDescription>
+                      Crie rota, para que os próximos usuários com mesmo destino
+                      te encontrem
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handelOnsubmit}>
+                    <div className="grid gap-4">
+                      <div className="grid gap-3">
+                        <Label htmlFor="from">Distrito atual</Label>
+                        <Input
+                          id="from"
+                          name="from"
+                          required
+                          defaultValue="Viana"
+                        />
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="to">Distrito de destino</Label>
+                        <Input
+                          id="to"
+                          name="to"
+                          required
+                          defaultValue="Cacuaco"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter className="mt-4">
+                      <DialogClose asChild>
+                        <Button variant="outline" type="button">
+                          Cancelar
+                        </Button>
+                      </DialogClose>
+                      <Button type="submit" disabled={processing}>
+                        {processing ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          <>
+                            Publicar <ArrowUp className="rotate-40" />
+                          </>
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
           )}
         </aside>
       )}

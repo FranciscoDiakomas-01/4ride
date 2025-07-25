@@ -1,16 +1,88 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, ArrowUp, Upload } from "lucide-react";
+import { ArrowLeft, ArrowUp, Loader2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import PaymentService from "@/services/api/Payments/payments.service";
 export default function CreatePayment() {
   const router = useRouter();
-  const [load, setLoad] = useState(true);
+  const [processing, setProcessing] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [amount, setAmount] = useState(0);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxSizeMB = 32;
+    if (!allowedTypes.includes(selected.type)) {
+      toast.error("Apenas arquivos JPG ou PNG são aceitos.");
+      return;
+    }
+    if (selected.size / 1024 / 1024 > maxSizeMB) {
+      toast.error("Imagem muito grande. Máximo permitido é 32MB.");
+      return;
+    }
+    setFile(selected);
+  };
+
+  const handelOnSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setProcessing(true);
+    if (!file || !amount || amount < 50) {
+      toast.error("Selecione um comprovativo antes de enviar.");
+      setProcessing(false);
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const token = localStorage.getItem("token") ?? "";
+      if (!token) {
+        console.log(token);
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      }
+      const paymentService = new PaymentService(token);
+      const uploadFile = await fetch(
+        "https://api.imgbb.com/1/upload?key=ba6c1340bea57458e666eec5a6da127b",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await uploadFile.json();
+      const create = await paymentService.createPayment({
+        amount,
+        file: data?.data?.url,
+      });
+      console.log(create);
+      if (create?.created) {
+        toast.success(
+          "Estamos a validar o seu pagamento. Aguarde a confirmação."
+        );
+        setTimeout(() => {
+          setProcessing(false);
+          router.back();
+        }, 1000);
+      } else {
+        toast.error("Erro ao enviar comprovativo. Tente novamente.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao enviar comprovativo. Tente novamente.");
+    } finally {
+      setTimeout(() => {
+        setProcessing(false);
+      }, 1000);
+    }
+  };
 
   return (
     <main className="flex flex-col gap-4 pb-30">
@@ -24,103 +96,84 @@ export default function CreatePayment() {
         <h1>Pagamentos</h1>
       </span>
 
-      <Tabs defaultValue="1" className="w-full px-2">
-        <TabsList className="w-full h-12  bg-white gap-2">
-          <TabsTrigger value="1">Express</TabsTrigger>
-          <TabsTrigger value="2">Referência</TabsTrigger>
-          <TabsTrigger value="3">Transferência</TabsTrigger>
-        </TabsList>
-        <TabsContent value="1">
-          <form
-            data-aos="fade-up"
-            action=""
-            className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
-          >
-            <div className="flex justify-center items-center flex-col ">
-              <h1 className="text-primary text-2xl font-semibold">Carregue </h1>
-              <p className="text-sm">a sua conta</p>
-            </div>
-            <Label htmlFor="tel">Telefone</Label>
+      <div className="w-full">
+        <form
+          onSubmit={handelOnSubmit}
+          data-aos="fade-up"
+          action=""
+          className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
+        >
+          <div className="flex justify-center items-center flex-col ">
+            <h1 className="text-primary text-2xl font-semibold">Carregue </h1>
+            <p className="text-sm">a sua conta</p>
+          </div>
+          <Label htmlFor="anmount">Valor</Label>
+          <Input
+            required
+            placeholder="Montante"
+            type="number"
+            id="anmount"
+            min={50}
+            name="anmount"
+            onChange={(e) => {
+              setAmount(Number(e.target.value));
+            }}
+          />{" "}
+          <Label htmlFor="number">Comprovante</Label>
+          <div className="border-2 p-2 rounded-sm border-dashed h-30 flex justify-center items-center overflow-hidden relative">
             <Input
               required
-              placeholder="9xx xxx xxx"
-              type="tel"
-              id="tel"
-              name="tel"
-            />{" "}
-            <Label htmlFor="number">Montante</Label>
-            <Input
-              required
-              placeholder="934"
-              type="number"
-              id="number"
-              name="tel"
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="absolute w-full h-full opacity-0 cursor-pointer"
+              name="file"
             />
-            <Button className="text-md  h-[45px]">
-              Carregar <ArrowUp className="rotate-40" />{" "}
-            </Button>
-          </form>
-        </TabsContent>
-        <TabsContent value="2">
-          <form
-            data-aos="fade-up"
-            action=""
-            className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
-          >
-            <div className="flex justify-center items-center flex-col ">
-              <h1 className="text-primary text-2xl font-semibold">Carregue </h1>
-              <p className="text-sm">a sua conta</p>
+            <div className="flex justify-center items-center flex-col gap-3 animate-pulse">
+              <Upload />
+              <small>
+                {!file ? "Clique para enviar um arqivo" : file.name}
+              </small>
             </div>
-            <Label htmlFor="number">Montante</Label>
-            <Input
-              required
-              placeholder="934"
-              type="number"
-              id="number"
-              name="tel"
-            />
-            <Button className="text-md  h-[45px]">
-              Gerar Refência <ArrowUp className="rotate-40" />{" "}
-            </Button>
-          </form>
-        </TabsContent>
-        <TabsContent value="3">
-          <form
-            data-aos="fade-up"
-            action=""
-            className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%]"
-          >
-            <div className="flex justify-center items-center flex-col ">
-              <h1 className="text-primary text-2xl font-semibold">Carregue </h1>
-              <p className="text-sm">a sua conta</p>
-            </div>
-            <Label htmlFor="number">Comprovante</Label>
-            <div className="border-2 p-2 rounded-sm border-dashed h-30 flex justify-center items-center overflow-hidden relative">
-              <Input
-                required
-                placeholder="934"
-                type="file"
-                id="number"
-                className="absolute w-full h-full opacity-0 cursor-pointer"
-                name="tel"
-              />
-              <div className="flex justify-center items-center flex-col gap-3 animate-pulse">
-                <Upload />
-                <small>Clique para enviar um arqivo</small>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4 ">
-              <Button className="text-md  h-[45px]">
-                Enviar <ArrowUp className="rotate-40" />{" "}
-              </Button>
-              <Button variant={"outline"} className="text-md  h-[45px]">
+          </div>
+          <div className="grid md:grid-cols-1 gap-4 ">
+            <div className="w-full grid md:grid-cols-2 gap-2">
+              <Button
+                variant={"outline"}
+                type="button"
+                className="text-md  h-[45px]"
+                onClick={() => {
+                  navigator.clipboard.writeText("004000008281760810161");
+                  toast.info("Iban copiado");
+                }}
+              >
                 Copiar IBAN
               </Button>
+              <Button
+                type="button"
+                variant={"outline"}
+                className="text-md  h-[45px]"
+                onClick={() => {
+                  navigator.clipboard.writeText("937382861");
+                  toast.info("Express copiado");
+                }}
+              >
+                Copiar Express
+              </Button>
             </div>
-          </form>
-        </TabsContent>
-      </Tabs>
+            <Button className="text-md  h-[45px]">
+              {processing ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  Pagar <ArrowUp className="rotate-40" />
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }

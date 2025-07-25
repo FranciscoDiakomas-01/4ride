@@ -3,19 +3,50 @@ import car from "@/assets/carinit.png";
 import AcountCard from "@/components/AcountCard";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
+import UserService from "@/services/api/user/user.service";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UserHome() {
   const [load, setLoad] = useState(true);
 
+  const router = useRouter();
+  let servive: UserService;
+  const [user, setUser] = useState({
+    name: "string",
+    lastname: "string",
+    points: 0,
+    telefone: "string",
+  });
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    async function get() {
+      if (!token) {
+        console.log(token);
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      } else {
+        servive = new UserService(token);
+        const data = await servive.GetMyData();
+        if (!data?.found) {
+          toast.info(data?.message);
+        } else {
+          toast.success("Benvido " + data.name);
+          setUser({
+            ...data,
+          });
+        }
+      }
+    }
+
+    get();
     setTimeout(() => {
       setLoad(false);
     }, 3000);
   }, []);
-  const router = useRouter();
   return (
     <main className="w-full overflow-x-hidden flex flex-col gap-3 p-4 pt-8 pb-30">
       {load ? (
@@ -30,13 +61,13 @@ export default function UserHome() {
               Um dia incrível pra você
             </p>
             <h1
-              className="text-4xl font-semibold text-primary"
+              className="text-4xl font-semibold text-primary text-wrap"
               data-aos="fade-right"
             >
-              Francisco!
+              {user.name + " " + user.lastname}
             </h1>
           </div>
-          <AcountCard amount="100000" number="957777993" />
+          <AcountCard amount={String(user.points)} number={user.telefone} />
           <div className="flex flex-col w-full  justify-center items-center">
             <Image
               className="h-70 w-80 lg:hidden object-contain"
@@ -44,26 +75,16 @@ export default function UserHome() {
               alt="car"
               data-aos="fade-up"
             />
-            <div className="grid w-full lg:mt-6 grid-cols-2 gap-3 items-center">
+            <div className="grid w-full  lg:mt-6  gap-3  ">
               <Button
                 data-aos="fade-right"
-                className="h-[50px] text-white text-md md:w-[50%] w-full "
+                className="h-[50px] lg:w-[30%]  text-white text-md"
                 onClick={() => {
                   router.push("/user/routes");
                 }}
               >
                 Encontrar rota
               </Button>{" "}
-              <Button
-                data-aos="fade-left"
-                onClick={() => {
-                  router.push("/user/routes/myroutes");
-                }}
-                variant={"outline"}
-                className="h-[50px] border-primary text-primary text-md md:w-[50%] w-full "
-              >
-                Minhas Rotas
-              </Button>
             </div>
           </div>
         </>

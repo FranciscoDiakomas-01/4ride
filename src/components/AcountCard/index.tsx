@@ -1,4 +1,3 @@
-
 import bubble from "@/assets/logo.png";
 import Image from "next/image";
 
@@ -28,7 +27,8 @@ export default function AcountCard({ amount, number }: props) {
         {number}
       </div>
       <h1 className="text-[14px] text-gray-100">
-        Seus créditos inicias equivalem a 12 viagens
+        Seus créditos equivalem a {Number(amount) > 0 ? Number(amount) / 50 : 0}{" "}
+        viagens
       </h1>
     </div>
   );

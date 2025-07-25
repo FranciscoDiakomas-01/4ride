@@ -18,44 +18,44 @@ export default function NotificationCard({ notification }: prop) {
           className={clsx(
             "w-10 h-10 rounded-full",
             {
-              "bg-amber-200/20 border-amber-400":
-                notification.type == "message",
+              "bg-amber-200/20 border-amber-400": notification.type == "ALERT",
             },
             {
-              "bg-red-200/20 border-red-400": notification.type == "alert",
+              "bg-indigo-200/20 border-indigo-400":
+                notification.type == "ROUTE",
             },
             {
-              "bg-indigo-200/20 border-indigo-400": notification.type == "ride",
-            },
-            {
-              "bg-blue-200/20 border-blue-400": notification.type == "payment",
+              "bg-blue-200/20 border-blue-400": notification.type == "PAYMENT",
             }
           )}
         >
-          {notification.type == "message" ? (
-            <Send className="text-amber-400" />
-          ) : notification.type == "alert" ? (
-            <AlertCircle className="text-red-500" />
-          ) : notification.type == "payment" ? (
-            <CreditCard className="text-blue-500" />
-          ) : (
+          {notification.type == "ROUTE" ? (
             <Car className="text-indigo-800" />
-          )}
+          ) : notification.type == "ALERT" ? (
+            <AlertCircle className="text-red-500" />
+          ) : notification.type == "PAYMENT" ? (
+            <CreditCard className="text-blue-500" />
+          ) : null}
         </Badge>
       </div>
       <div className="flex flex-col gap-1">
         <h1 className="text-md font-semibold">
           {" "}
-          {notification.type == "message"
+          {notification.type == "ROUTE"
             ? "Mensagem"
-            : notification.type == "alert"
+            : notification.type == "ALERT"
             ? "Alerta"
-            : notification.type == "payment"
+            : notification.type == "PAYMENT"
             ? "Pagamentos"
             : "Corrida"}
         </h1>
+        <h1 className="text-xl text-gray-900 font-semibold">
+          {notification.title}
+        </h1>
         <p className="text-sm text-gray-500">{notification.message}</p>
-        <small className="">{notification.date}</small>
+        <small className="">
+          {new Date(notification.createdAt).toDateString()}
+        </small>
       </div>
     </figure>
   );

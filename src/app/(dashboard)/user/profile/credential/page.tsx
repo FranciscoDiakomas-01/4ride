@@ -4,18 +4,65 @@ import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, EyeClosed, Save } from "lucide-react";
+import isValidPhone from "@/lib/isValiPhone";
+import UserService from "@/services/api/user/user.service";
+import { ArrowLeft, Eye, EyeClosed, Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UserNumber() {
   const router = useRouter();
   const [load, setLoad] = useState(true);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword((prev) => !prev);
+  let servive: UserService;
+  const [processing, setProceccing] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setLoad(false);
     }, 3000);
   }, []);
+
+  async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formata = new FormData(e.currentTarget);
+    const password = formata.get("password") as string;
+    const npassword = formata.get("npassword") as string;
+
+    if (!password || !npassword) {
+      toast.error("Preenche Todos os campos");
+      return;
+    } else {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log(token);
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      } else {
+        setProceccing(true);
+        servive = new UserService(token);
+        const data = await servive.updatePassword({
+          oldPassword: password,
+          newPassword: npassword,
+        });
+        if (data.updated) {
+          toast.success(data.message);
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        } else {
+          toast.error(data.message);
+        }
+        setTimeout(() => {
+          setProceccing(false);
+        }, 2000);
+      }
+    }
+  }
   return (
     <main className="flex flex-col gap-4 pb-30">
       <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945]">
@@ -35,6 +82,7 @@ export default function UserNumber() {
       ) : (
         <div className="p-4 flex flex-col">
           <form
+            onSubmit={handelOnSubmit}
             data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%] "
@@ -51,14 +99,25 @@ export default function UserNumber() {
               </Label>
               <div className="flex relative  items-center gap-2">
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
                   placeholder="*******"
                   required
                   className="w-full   placeholder:text-[#8C8C8C] p text-sm"
                 />
-                <EyeClosed color="#8C8C8C" size={18} />
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="absolute right-2"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? (
+                    <Eye color="#8C8C8C" size={18} />
+                  ) : (
+                    <EyeClosed color="#8C8C8C" size={18} />
+                  )}
+                </button>
               </div>
             </span>
             <span className="flex flex-col gap-3">
@@ -67,34 +126,38 @@ export default function UserNumber() {
               </Label>
               <div className="flex relative  items-center gap-2">
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="npassword"
                   id="npassword"
                   placeholder="*******"
                   required
+                  minLength={8}
                   className="w-full   placeholder:text-[#8C8C8C] p text-sm"
                 />
-                <EyeClosed color="#8C8C8C" size={18} />
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="absolute right-2"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? (
+                    <Eye color="#8C8C8C" size={18} />
+                  ) : (
+                    <EyeClosed color="#8C8C8C" size={18} />
+                  )}
+                </button>
               </div>
             </span>
-            <span className="flex flex-col gap-3">
-              <Label className="text-md font-medium" htmlFor="vpassword">
-                Cofirme a senha
-              </Label>
-              <div className="flex relative  items-center gap-2">
-                <Input
-                  type="password"
-                  name="vpassword"
-                  id="vpassword"
-                  placeholder="*******"
-                  required
-                  className="w-full   placeholder:text-[#8C8C8C] p text-sm"
-                />
-                <EyeClosed color="#8C8C8C" size={18} />
-              </div>
-            </span>
+
             <Button className="text-md  h-[45px]">
-              Salvar <Save />{" "}
+              {processing ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  {" "}
+                  Salvar <Save />
+                </>
+              )}
             </Button>
           </form>
         </div>

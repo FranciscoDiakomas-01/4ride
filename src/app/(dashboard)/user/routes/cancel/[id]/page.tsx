@@ -10,19 +10,19 @@ import { Button } from "@/components/ui/button";
 
 export default function CancelRoute() {
   const { id } = useParams();
-  const [selected, setSelected] = useState<string>("Mudança de destino?");
+  const [selected, setSelected] = useState<string>("YANGO");
   const router = useRouter();
   const motives = [
-    "Mudança de destino?",
-    "Problemas com o transporte",
-    "Horário incompatível",
-    "Companheiros não apareceram?",
+    "YANGO",
+    "YUGO",
+    "HEETCH",
+    "UBER",
     "outro",
   ];
   return (
     <section className="h-screen overflow-x-hidden flex flex-col gap-7 pb-30">
       <span className="shadow-md flex p-4 ">
-        <h1 className="text-md font-semibold">Cancelar rota</h1>
+        <h1 className="text-md font-semibold">Finalizar rota</h1>
       </span>
       <form
         data-aos="fade-up"
@@ -32,9 +32,7 @@ export default function CancelRoute() {
           e.preventDefault();
         }}
       >
-        <h1 className="text-md font-semibold">
-          Qual o motivo do cancelamento?
-        </h1>
+       
         <RadioGroup
           value={selected}
           defaultValue={motives[0]}
@@ -65,7 +63,7 @@ export default function CancelRoute() {
         />
         <div className="grid grid-cols-2 gap-2 w-full">
           <Button className="h-[45px] w-full text-md" type="submit">
-            Enviar
+            Finalizar
           </Button>
           <Button
             variant={"outline"}

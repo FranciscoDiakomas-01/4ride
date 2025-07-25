@@ -4,6 +4,6 @@ export default interface IRoute {
   to: string;
   users: number;
   distance: string;
-  date: `${number} , ${string} , ${number}`
-  status : "Aberta" | "Fechada" | "Cancelada"
+  date: string;
+  status: string;
 }

@@ -1,12 +1,16 @@
 "use client";
 import "aos/dist/aos.css";
 import AOS from "aos";
-
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sideBar";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import TokenMonitor from "@/components/TokenMonitor";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -16,6 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <main className="w-full">
+        <TokenMonitor />
         <AppSidebar />
         <SidebarTrigger
           variant={"default"}

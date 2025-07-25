@@ -4,18 +4,66 @@ import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save } from "lucide-react";
+import isValidPhone from "@/lib/isValiPhone";
+import UserService from "@/services/api/user/user.service";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UserNumber() {
   const router = useRouter();
   const [load, setLoad] = useState(true);
+
+  let servive: UserService;
+  const [processing, setProceccing] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setLoad(false);
     }, 3000);
   }, []);
+
+  async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formata = new FormData(e.currentTarget);
+    const oldPhone = formata.get("oldPhone") as string;
+    const newPhone = formata.get("newPhone") as string;
+
+    if (!oldPhone || !newPhone) {
+      toast.error("Preenche Todos os campos");
+      return;
+    } else {
+      if (isValidPhone(oldPhone) && isValidPhone(newPhone)) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log(token);
+          toast.error("Você precisa estar logado");
+          router.push("/login");
+          return;
+        } else {
+          setProceccing(true);
+          servive = new UserService(token);
+          const data = await servive.updateTelefone({
+            oldPhone: String(isValidPhone(oldPhone)),
+            newPhone: String(isValidPhone(newPhone)),
+          });
+          if (data.updated) {
+            toast.success(data.message);
+            setTimeout(() => {
+              location.reload();
+            }, 3000);
+          } else {
+            toast.error(data.message);
+          }
+
+          setTimeout(() => {
+            setProceccing(false);
+          }, 2000);
+        }
+      }
+    }
+  }
   return (
     <main className="flex flex-col gap-4 pb-30">
       <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945]">
@@ -35,6 +83,7 @@ export default function UserNumber() {
       ) : (
         <div className="p-4 flex flex-col">
           <form
+            onSubmit={handelOnSubmit}
             data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%] "
@@ -50,27 +99,26 @@ export default function UserNumber() {
               required
               placeholder="9xx xxx xxx"
               type="tel"
-              id="tel"
-              name="tel"
+              id="oldPhone"
+              name="oldPhone"
             />{" "}
             <Label htmlFor="tel1">Novo número</Label>
             <Input
               required
               placeholder="9xx xxx xxx"
               type="tel"
-              id="tel1"
-              name="tel1"
-            />{" "}
-            <Label htmlFor="tel2">Confirma o número</Label>
-            <Input
-              required
-              placeholder="9xx xxx xxx"
-              type="tel"
-              id="tel2"
-              name="tel2"
+              id="newPhone"
+              name="newPhone"
             />{" "}
             <Button className="text-md  h-[45px]">
-              Salvar <Save />{" "}
+              {processing ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  {" "}
+                  Salvar <Save />
+                </>
+              )}
             </Button>
           </form>
         </div>

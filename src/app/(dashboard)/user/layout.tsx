@@ -8,6 +8,9 @@ import { Bell, Car, CreditCard, Home, User2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import TokenMonitor from "@/components/TokenMonitor";
+import NotifiCationService from "@/services/api/Notification/notification.service";
+import { toast } from "sonner";
 export default function UserLayout({
   children,
 }: Readonly<{
@@ -36,6 +39,7 @@ export default function UserLayout({
     },
   ];
 
+  const [notification, setNotification] = useState(0);
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -44,13 +48,44 @@ export default function UserLayout({
   }, []);
   const [active, setACtive] = useState(0);
   const router = useRouter();
+  let service: NotifiCationService;
+  useEffect(() => {
+    async function get() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+      service = new NotifiCationService(token);
+      const data = await service.getMyotificationCouter();
+      setNotification(data);
+    }
+    get();
+    const interval = setInterval(() => {
+      get();
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   return (
     <main>
+      <TokenMonitor />
       <Button
         onClick={() => {
           router.push("/user/notifications");
         }}
-        className="fixed right-2 top-4 z-[99999999999]"
+        className={clsx(
+          "fixed right-2 top-4 z-[99999999999] shadow-none ",
+          {
+            "bg-primary text-white": notification > 0,
+          },
+          {
+            "bg-gray-50 text-primary hover:text-primary hover:bg-gray-50":
+              notification <= 0,
+          }
+        )}
       >
         <Bell />
       </Button>

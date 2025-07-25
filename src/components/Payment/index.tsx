@@ -19,43 +19,40 @@ export default function PaymentCard({ payment }: props) {
           className={clsx(
             "flex justify-center items-center w-13 h-9 p-2 rounded-md",
             {
-              "bg-indigo-500/30 text-indigo-500 ": payment.status == "Pendente",
+              "bg-indigo-500/30 text-indigo-500 ": payment.status == "PENDING",
             },
             {
-              "bg-green-500/30 text-green-500 ": payment.status == "Confirmado",
+              "bg-green-500/30 text-green-500 ":
+                payment.status == "CONFIRMATED",
             },
             {
-              "bg-red-500/30 text-red-500 ": payment.status == "Cancelado",
+              "bg-red-500/30 text-red-500 ": payment.status == "CANCELLED",
             }
           )}
         >
-          {payment.status == "Confirmado" && <CheckCircle size={18} />}
-          {payment.status == "Cancelado" && <AlertCircle size={18} />}
-          {payment.status == "Pendente" && <Ellipsis size={18} />}
+          {payment.status == "CONFIRMATED" && <CheckCircle size={18} />}
+          {payment.status == "CANCELLED" && <AlertCircle size={18} />}
+          {payment.status == "PENDING" && <Ellipsis size={18} />}
         </div>
         <span className="flex flex-col gap-2 min-w-[150px] ">
           <p>{payment.method}</p>
-          <small>{payment.createdAt}</small>
+          <small>{new Date(payment.createdAt).toDateString()}</small>{" "}
+          <small>
+            {payment.status == "CONFIRMATED" &&
+              payment.updatedAt &&
+              new Date(payment.updatedAt).toDateString()}
+          </small>
         </span>
         <h1 className="w-full text-md font-semibold">
           {Number(payment.amount).toLocaleString("pt")} kz
         </h1>
       </div>
-      <p
-        className={clsx(
-          "text-sm opacity-50 border p-2 rounded-sm",
-          {
-            " text-indigo-500 ": payment.status == "Pendente",
-          },
-          {
-            " text-green-500 ": payment.status == "Confirmado",
-          },
-          {
-            " text-red-500 ": payment.status == "Cancelado",
-          }
-        )}
-      >
-        {payment.message}
+      <p className={clsx("text-sm  p-2")}>
+        {payment.status == "PENDING"
+          ? "Pagamento pendente , aguarde a verificação"
+          : payment.status == "CONFIRMATED"
+          ? "Pagamento confirmado som sucesso"
+          : "Pagamento cancelado"}
       </p>
     </figure>
   );

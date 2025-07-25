@@ -33,7 +33,7 @@ export default function Route({ item, showDescription = true }: props) {
           </div>
           <p className="flex gap-1 items-center text-gray-900 opacity-70 text-nowrap">
             <LucideLocationEdit size={18} />
-            {item.distance} de distância ( {item.status} )
+            {item.distance} ( {item.status == "OPEN" ? "aberta" : "fechada"} )
           </p>
         </div>
         <Image className="h-13 w-13 object-contain" src={car} alt="car" />
@@ -41,15 +41,22 @@ export default function Route({ item, showDescription = true }: props) {
 
       <figcaption className="grid grid-cols-2 gap-4">
         <Button
+          variant={"outline"}
           className={clsx("w-full  h-[45px] text-md border-0 ", {
             "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
               showDescription,
           })}
           onClick={() => {
-            router.push(`/user/routes/chat/${item.id}`);
+            const myId = localStorage.getItem("id");
+            if (!myId) {
+              toast.error("Você deve estar logado");
+            } else {
+              toast.success("Bem vindo á rota!");
+              router.push(`/user/routes/chat/${item.id}`);
+            }
           }}
         >
-          Entrar
+          Entrar no chat
         </Button>
         {showDescription && (
           <Button
@@ -68,8 +75,9 @@ export default function Route({ item, showDescription = true }: props) {
 
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
+import { toast } from "sonner";
 export function RouteAdmin({ item, showDescription = true }: props) {
-  const [rout , setRout] = useState(item)
+  const [rout, setRout] = useState(item);
   const router = useRouter();
   return (
     <figure
@@ -108,9 +116,15 @@ export function RouteAdmin({ item, showDescription = true }: props) {
         </Button>
       )}
       {!showDescription && (
-        <Switch onCheckedChange={() => {
-          setRout((prev) =>({...prev , status : prev.status == "Aberta" ? "Fechada" : "Aberta"}))
-        }} checked={rout.status == "Aberta"} />
+        <Switch
+          onCheckedChange={() => {
+            setRout((prev) => ({
+              ...prev,
+              status: prev.status == "Aberta" ? "Fechada" : "Aberta",
+            }));
+          }}
+          checked={rout.status == "Aberta"}
+        />
       )}
     </figure>
   );

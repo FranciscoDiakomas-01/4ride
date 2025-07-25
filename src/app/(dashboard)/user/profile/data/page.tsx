@@ -5,20 +5,95 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { mockUsers } from "@/constants/users";
+import UserService from "@/services/api/user/user.service";
 import IUser from "@/types/user";
-import { ArrowLeft, Camera, Save } from "lucide-react";
+import { ArrowLeft, Camera, Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function UserData() {
   const router = useRouter();
+
+  let servive: UserService;
   const [load, setLoad] = useState(true);
-  const [user, setUser] = useState<IUser>(mockUsers[0]);
+  const [user, setUser] = useState({
+    name: "string",
+    lastname: "string",
+    points: 0,
+    telefone: "string",
+  });
+  const [processing, setProceccing] = useState(false);
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    async function get() {
+      if (!token) {
+        console.log(token);
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      } else {
+        servive = new UserService(token);
+        const data = await servive.GetMyData();
+        if (!data?.found) {
+          toast.info(data?.message);
+        } else {
+          setUser({
+            ...data,
+          });
+        }
+      }
+    }
+
+    get();
     setTimeout(() => {
       setLoad(false);
     }, 3000);
   }, []);
+
+  async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formata = new FormData(e.currentTarget);
+    const name = formata.get("name") as string;
+    const lastname = formata.get("lastname") as string;
+    if (!name || !lastname) {
+      toast.error("Preenche Todos os campos");
+      return;
+    } else {
+      if (lastname == user.lastname && name == user.name) {
+        return;
+      }
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log(token);
+        toast.error("Você precisa estar logado");
+        router.push("/login");
+        return;
+      } else {
+        setProceccing(true);
+        servive = new UserService(token);
+        const data = await servive.updateProfile({
+          name,
+          lastname,
+        });
+        if (data.updated) {
+          toast.success(data.message);
+          setTimeout(() => {
+            location.reload()
+          },3000)
+        } else {
+          toast.error(data.message);
+        }
+
+        setTimeout(() => {
+          setProceccing(false);
+        }, 2000);
+
+        return;
+      }
+    }
+  }
   return (
     <main className="flex flex-col gap-4 pb-30">
       <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945] ">
@@ -38,6 +113,7 @@ export default function UserData() {
       ) : (
         <div className="p-4 flex flex-col">
           <form
+            onSubmit={handelOnSubmit}
             data-aos="fade-up"
             action=""
             className="flex flex-col gap-4 border rounded-sm p-4 mt-9 md:place-self-center md:w-[50%] "
@@ -46,24 +122,10 @@ export default function UserData() {
               <h1 className="text-primary text-2xl font-semibold">
                 Edite os dados{" "}
               </h1>
-              <p className="text-sm">da sua conta</p>
+              <p className="text-sm">do seu perfil</p>
             </div>
-            <Label htmlFor="name">Foto</Label>{" "}
-            <div
-              className="h-30 w-30 relative
-             rounded-full border-3 border-double flex flex-col justify-center items-center  "
-            >
-              <img
-                src={user.profile}
-                className=" object-contain h-25 w-25 rounded-full"
-              />
-              <Input
-                className="absolute cursor-pointer rounded-full opacity-0 h-30 w-30"
-                type="file"
-              />
-              <div className="absolute animate-pulse text-white bg-primary p-1 rounded-sm left-1 bottom-2">
-                <Camera size={18} />
-              </div>
+            <div className=" font-black  md:text-4xl text-3xl text-white bg-primary rounded-full md:p-4 p-2 max-w-20 place-self-center max-h-20  flex justify-center items-center">
+              {user.name.charAt(0) + user.lastname.charAt(0)}
             </div>
             <Label htmlFor="name">Nome</Label>
             <Input
@@ -71,6 +133,7 @@ export default function UserData() {
               placeholder="seu nome"
               type="text"
               id="name"
+              defaultValue={user.name}
               name="name"
             />{" "}
             <Label htmlFor="lastname">Sobrenome</Label>
@@ -79,10 +142,18 @@ export default function UserData() {
               placeholder="seu sobrenome  (opcional)"
               type="text"
               id="lastname"
+              defaultValue={user.lastname}
               name="lastname"
             />{" "}
-            <Button className="text-md  h-[45px]">
-              Salvar <Save />{" "}
+            <Button type="submit" className="text-md  h-[45px]">
+              {processing ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  {" "}
+                  Salvar <Save />
+                </>
+              )}
             </Button>
           </form>
         </div>

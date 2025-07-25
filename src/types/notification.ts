@@ -1,6 +1,9 @@
 export default interface INotification {
-  id: number | string;
+  createdAt: Date;
+  id: number;
   message: string;
-  date: `${number}, ${string}, ${number}`;
-  type: "alert" | "message" | "payment" | "ride";
+  read: boolean;
+  title: string;
+  type: "ALERT" | "PAYMENT" | "ROUTE";
+  updatedAt: Date;
 }

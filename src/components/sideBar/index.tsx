@@ -19,11 +19,6 @@ import { mockUsers } from "@/constants/users";
 
 const items = [
   {
-    title: "Inicial",
-    url: "/admin",
-    icon: Home,
-  },
-  {
     title: "Passageiros",
     url: "/admin/users",
     icon: User,
