@@ -34,7 +34,7 @@ export default function UserHome() {
         if (!data?.found) {
           toast.info(data?.message);
         } else {
-          toast.success("Benvido " + data.name);
+          toast.success("Bemvido " + data.name);
           setUser({
             ...data,
           });
