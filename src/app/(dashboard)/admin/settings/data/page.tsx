@@ -26,6 +26,12 @@ export default function UserData() {
   const [processing, setProceccing] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || role != "ADMIN") {
+      toast.info("Deves estar logado");
+      router.push("/");
+      return;
+    }
     async function get() {
       if (!token) {
         console.log(token);
@@ -80,8 +86,8 @@ export default function UserData() {
         if (data.updated) {
           toast.success(data.message);
           setTimeout(() => {
-            location.reload()
-          },3000)
+            location.reload();
+          }, 3000);
         } else {
           toast.error(data.message);
         }

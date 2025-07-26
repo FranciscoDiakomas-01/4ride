@@ -64,22 +64,23 @@ export default function Profile() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     async function get() {
-      if (!token) {
-        console.log(token);
-        toast.error("Você precisa estar logado");
-        router.push("/login");
-        return;
-      } else {
-        servive = new UserService(token);
-        const data = await servive.GetMyData();
-        if (!data?.found) {
-          toast.info(data?.message);
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        if (!token || role != "ADMIN") {
+          toast.info("Deves estar logado");
+          router.push("/");
+          return;
         } else {
-          setUser({
-            ...data,
-          });
+          servive = new UserService(token);
+          const data = await servive.GetMyData();
+          if (!data?.found) {
+            toast.info(data?.message);
+          } else {
+            setUser({
+              ...data,
+            });
+          }
         }
-      }
     }
 
     get();

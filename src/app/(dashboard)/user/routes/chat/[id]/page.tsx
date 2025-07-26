@@ -20,6 +20,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Loader from "@/components/Loader";
 interface Notification {
   message: string;
   timestamp: string;
@@ -122,8 +123,9 @@ export default function GroupChat() {
     socket.on("notification", (data: Notification) => {
       toast.info(`📢 ${data.message}`);
     });
-    socket.on("route_ended", (data: Notification) => {
+    socket.on("route_ended", (data: any) => {
       toast.info(`❌ ${data.message}`);
+      setMessages((prev) => [...prev, data]);
     });
 
     return () => {
@@ -156,9 +158,21 @@ export default function GroupChat() {
 
   return (
     <div className="flex flex-col h-[85dvh]">
-      {!load && (
+      {load ? (
+        <div className="w-full flex flex-col justify-center items-center min-h-[50dvh] scale-75">
+          <Loader type="Spinner" />
+        </div>
+      ) : (
         <>
-          {" "}
+          <header className="p-2">
+            <Button
+              onClick={() => {
+                router.push(`/user/routes/${id}`);
+              }}
+            >
+              Detalhes
+            </Button>
+          </header>
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {messages.map((msg, index) => {
               const key = msg?.id || `${msg?.senderid || "local"}-${index}`;

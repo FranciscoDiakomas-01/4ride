@@ -61,11 +61,13 @@ export default function Users() {
   const router = useRouter();
   useEffect(() => {
     async function get() {
-      const token = localStorage.getItem("token") ?? "";
-      if (!token) {
-        toast.info("Deves estar logado");
-        router.push("/");
-      }
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        if (!token || role != "ADMIN") {
+          toast.info("Deves estar logado");
+          router.push("/");
+          return;
+        }
       const service = new UserService(token);
       const data = await service.getAllUsers();
       console.log(data);

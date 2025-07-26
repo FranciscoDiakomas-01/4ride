@@ -1,30 +1,5 @@
 "use client";
-import { Check, ChevronsUpDown, CreditCard, Download } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import {  CreditCard, Download } from "lucide-react";
 
 import { Switch } from "@/components/ui/switch";
 import {
@@ -42,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { IStats } from "@/types/stats";
 import { AlertCircle, ArrowDown, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { PaymentDashBoard } from "@/types/payemnt";
 import { paymentDashboardMocks } from "@/constants/paymentsDashboard";
 import PaymentService from "@/services/api/Payments/payments.service";
 import { toast } from "sonner";
@@ -77,9 +51,11 @@ export default function Payments() {
       },
     ]);
     const token = localStorage.getItem("token");
-    if (!token) {
+    const role = localStorage.getItem("role");
+    if (!token || role != "ADMIN") {
       toast.info("Deves estar logado");
       router.push("/");
+      return
     }
     async function get() {
       const service = new PaymentService(token ?? "s");
@@ -87,7 +63,7 @@ export default function Payments() {
       console.log(data);
       const formatted = data.payments.map((payment) => ({
         amount: payment.amount,
-        telefone: payment.user?.phone || "Não informado",
+        telefone: payment.user?.telefone || "Não informado",
         name: payment.user?.name || "Sem nome",
         lastname: payment.user?.lastname || "Sem sobrenome",
         method: payment.method,

@@ -30,6 +30,11 @@ export default function Router() {
   const [processing, setProcessing] = useState(false);
   const [routes, setRoutes] = useState<IRoute[]>([]);
   const [open, setOpen] = useState(false);
+
+  const [filtres, setFiltes] = useState({
+    from: "",
+    to : ""
+  })
   const router = useRouter();
 
   let service: RouteService;
@@ -174,6 +179,7 @@ export default function Router() {
                   <div className="grid gap-3">
                     <Label htmlFor="from">Distrito atual</Label>
                     <Input
+                      defaultValue={fromFilter}
                       id="from"
                       name="from"
                       required
@@ -181,7 +187,13 @@ export default function Router() {
                   </div>
                   <div className="grid gap-3">
                     <Label htmlFor="to">Distrito de destino</Label>
-                    <Input id="to" name="to" required/>
+                    <Input
+                      id="to"
+                      name="to"
+                      defaultValue={toFilter}
+                      onChange={(e) => setToFilter(e.target.value)}
+                      required
+                    />
                   </div>
                 </div>
                 <DialogFooter className="mt-4">
@@ -245,7 +257,7 @@ export default function Router() {
                           id="from"
                           name="from"
                           required
-                          defaultValue="Viana"
+                          defaultValue={fromFilter}
                         />
                       </div>
                       <div className="grid gap-3">
@@ -254,7 +266,7 @@ export default function Router() {
                           id="to"
                           name="to"
                           required
-                          defaultValue="Cacuaco"
+                          defaultValue={toFilter}
                         />
                       </div>
                     </div>

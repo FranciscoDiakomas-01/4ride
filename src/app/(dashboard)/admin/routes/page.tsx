@@ -31,9 +31,10 @@ export default function Users() {
   useEffect(() => {
     const myId = localStorage.getItem("id");
     const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
     async function get() {
-      if (!token || !myId) {
-        toast.error("Você precisa estar logado");
+      if (!token || role != "ADMIN" || !myId) {
+        toast.info("Deves estar logado");
         router.push("/");
         return;
       }
@@ -71,7 +72,6 @@ export default function Users() {
 
   return (
     <main className="p-3 flex flex-col gap-5">
-
       <span className="grid gap-4 mt-4 xl:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 grid-cols-1">
         {Array.isArray(stats) &&
           stats.length > 0 &&

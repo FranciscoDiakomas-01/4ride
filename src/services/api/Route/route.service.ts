@@ -87,4 +87,25 @@ export default class RouteService {
       };
     }
   }
+  public async outInRoute(id: number) {
+    try {
+      const response = await fetch(`${server}/routes/${id}`, {
+        method: "DELTE",
+        headers: {
+          "Content-Type": "application/json",
+          token: this.token,
+        },
+      });
+      const data = (await response.json()) as {
+        message: string;
+        outed: boolean;
+      };
+      return data;
+    } catch (error) {
+      return {
+        outed: false,
+        message: "Erro ao pegar as rotas!",
+      };
+    }
+  }
 }

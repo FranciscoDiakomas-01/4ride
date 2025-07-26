@@ -20,6 +20,13 @@ export default function UserNumber() {
   let servive: UserService;
   const [processing, setProceccing] = useState(false);
   useEffect(() => {
+       const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        if (!token || role != "ADMIN") {
+          toast.info("Deves estar logado");
+          router.push("/");
+          return
+        }
     setTimeout(() => {
       setLoad(false);
     }, 1000);

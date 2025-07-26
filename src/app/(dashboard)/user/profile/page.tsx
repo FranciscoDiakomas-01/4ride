@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { mockUsers } from "@/constants/users";
-import { ArrowLeft, PhoneCall } from "lucide-react";
+import { ArrowLeft, HelpCircle, PhoneCall } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   User2Icon,
@@ -174,6 +174,27 @@ export default function Profile() {
                   </AccordionContent>
                 </AccordionItem>
               ))}
+              <AccordionItem
+                className="active:scale-100"
+                value={`value-${3454}`}
+              >
+                <AccordionTrigger className="active:scale-100">
+                  <div className="flex flex-col gap-3 justify-center">
+                    <HelpCircle />
+                    <p>Suporte 4Ride</p>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="active:scale-100 flex flex-col gap-3">
+                  <p>
+                    Bem-vindo à central de ajuda do nosso aplicativo! Estamos
+                    aqui para garantir que você tenha a melhor experiência
+                    possível
+                    <span className="text-primary font-semibold">
+                     {" "} suporte4ride@gmail.com
+                    </span>
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
             </Accordion>
           </span>
         </div>
