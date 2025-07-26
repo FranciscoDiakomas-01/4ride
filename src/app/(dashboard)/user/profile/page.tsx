@@ -181,16 +181,24 @@ export default function Profile() {
                 <AccordionTrigger className="active:scale-100">
                   <div className="flex flex-col gap-3 justify-center">
                     <HelpCircle />
-                    <p>Suporte 4Ride</p>
+                    <p>Sobre nós</p>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="active:scale-100 flex flex-col gap-3">
                   <p>
-                    Bem-vindo à central de ajuda do nosso aplicativo! Estamos
-                    aqui para garantir que você tenha a melhor experiência
-                    possível
+                    A 4Ride é uma plataforma que conecta pessoas com destinos
+                    semelhantes para partilharem corridas privadas e reduzirem
+                    custos. Através de um sistema simples de agrupamento,
+                    facilitamos a organização de corridas conjuntas usando os
+                    apps de táxi já existentes. Mais economia, mais conexão,
+                    mais mobilidade. 💚
                     <span className="text-primary font-semibold">
-                     {" "} suporte4ride@gmail.com
+                      {" "}
+                      4ridegroup@gmail.com
+                    </span>{" "}
+                    <span className="text-primary font-semibold">
+                      {" "}
+                      937382861
                     </span>
                   </p>
                 </AccordionContent>
