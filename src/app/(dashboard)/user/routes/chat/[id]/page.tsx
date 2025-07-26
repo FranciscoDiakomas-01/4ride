@@ -293,16 +293,12 @@ export default function GroupChat() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant={"outline"} className="w-full">
-                    Finalizar rota
+                    Chamar Táxi
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle> Escolha o serviço de táxi</DialogTitle>
-                    <DialogDescription>
-                      Antes de finalizar garanta que todos os outros passageiros
-                      estejem cientes do acto para evitar constrangimento
-                    </DialogDescription>
                   </DialogHeader>
                   <form
                     onSubmit={(e) => {

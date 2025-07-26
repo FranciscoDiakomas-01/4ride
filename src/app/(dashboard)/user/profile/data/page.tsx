@@ -24,7 +24,9 @@ export default function UserData() {
     telefone: "string",
   });
   const [processing, setProceccing] = useState(false);
+  const [reload, setReload] = useState(false);
   useEffect(() => {
+    setLoad(true);
     const token = localStorage.getItem("token");
     async function get() {
       if (!token) {
@@ -44,12 +46,11 @@ export default function UserData() {
         }
       }
     }
-
     get();
     setTimeout(() => {
       setLoad(false);
     }, 1000);
-  }, []);
+  }, [reload]);
 
   async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -79,9 +80,7 @@ export default function UserData() {
         });
         if (data.updated) {
           toast.success(data.message);
-          setTimeout(() => {
-            location.reload()
-          },3000)
+          setReload((prev) => !prev);
         } else {
           toast.error(data.message);
         }
