@@ -25,10 +25,10 @@ import Loader from "@/components/Loader";
 export default function Profile() {
   let servive: UserService;
   const [user, setUser] = useState({
-    name: "string",
-    lastname: "string",
+    name: "",
+    lastname: "",
     points: 0,
-    telefone: "string",
+    telefone: "",
   });
 
   const [load, setLoad] = useState(true);

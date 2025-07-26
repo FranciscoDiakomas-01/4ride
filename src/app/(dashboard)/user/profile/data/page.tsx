@@ -18,10 +18,10 @@ export default function UserData() {
   let servive: UserService;
   const [load, setLoad] = useState(true);
   const [user, setUser] = useState({
-    name: "string",
-    lastname: "string",
+    name: "",
+    lastname: "",
     points: 0,
-    telefone: "string",
+    telefone: "",
   });
   const [processing, setProceccing] = useState(false);
   const [reload, setReload] = useState(false);

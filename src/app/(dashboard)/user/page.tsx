@@ -15,10 +15,10 @@ export default function UserHome() {
   const router = useRouter();
   let servive: UserService;
   const [user, setUser] = useState({
-    name: "string",
-    lastname: "string",
+    name: "",
+    lastname: "",
     points: 0,
-    telefone: "string",
+    telefone: "",
   });
   useEffect(() => {
     const token = localStorage.getItem("token");
