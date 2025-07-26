@@ -38,14 +38,15 @@ export default function UserHome() {
           setUser({
             ...data,
           });
+
+          setTimeout(() => {
+            setLoad(false);
+          }, 1000);
         }
       }
     }
 
     get();
-    setTimeout(() => {
-      setLoad(false);
-    }, 1000);
   }, []);
   return (
     <main className="w-full overflow-x-hidden flex flex-col gap-3 p-4 pt-8 pb-30">

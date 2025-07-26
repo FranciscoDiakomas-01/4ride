@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -64,29 +63,30 @@ export default function Profile() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     async function get() {
-        const token = localStorage.getItem("token");
-        const role = localStorage.getItem("role");
-        if (!token || role != "ADMIN") {
-          toast.info("Deves estar logado");
-          router.push("/");
-          return;
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role != "ADMIN") {
+        toast.info("Deves estar logado");
+        router.push("/");
+        return;
+      } else {
+        servive = new UserService(token);
+        const data = await servive.GetMyData();
+        if (!data?.found) {
+          toast.info(data?.message);
         } else {
-          servive = new UserService(token);
-          const data = await servive.GetMyData();
-          if (!data?.found) {
-            toast.info(data?.message);
-          } else {
-            setUser({
-              ...data,
-            });
-          }
+          setUser({
+            ...data,
+          });
         }
+
+        setTimeout(() => {
+          setLoad(false);
+        }, 1000);
+      }
     }
 
     get();
-    setTimeout(() => {
-      setLoad(false);
-    }, 1000);
   }, []);
 
   return (

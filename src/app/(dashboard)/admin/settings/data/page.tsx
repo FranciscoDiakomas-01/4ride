@@ -51,13 +51,14 @@ export default function UserData() {
             ...data,
           });
         }
+        
+    setTimeout(() => {
+      setLoad(false);
+    }, 1000);
       }
     }
 
     get();
-    setTimeout(() => {
-      setLoad(false);
-    }, 1000);
   }, [reload]);
 
   async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
