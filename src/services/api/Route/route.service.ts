@@ -90,7 +90,7 @@ export default class RouteService {
   public async outInRoute(id: number) {
     try {
       const response = await fetch(`${server}/routes/${id}`, {
-        method: "DELTE",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           token: this.token,
