@@ -185,7 +185,7 @@ export default function Profile() {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="active:scale-100 flex flex-col gap-3">
-                  <p>
+                  <p className="flex flex-col gap-3">
                     A 4Ride é uma plataforma que conecta pessoas com destinos
                     semelhantes para partilharem corridas privadas e reduzirem
                     custos. Através de um sistema simples de agrupamento,
