@@ -58,7 +58,7 @@ export default function UserHome() {
           {" "}
           <div className="flex flex-col">
             <p className="text-md text-gray-500" data-aos="fade-left">
-              Um dia incrível pra você
+              Tenha um ótimo dia com a gente!
             </p>
             <h1
               className="text-4xl font-semibold text-primary text-wrap"
