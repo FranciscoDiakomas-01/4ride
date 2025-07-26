@@ -18,9 +18,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Loader from "@/components/Loader";
+import RouteService from "@/services/api/Route/route.service";
 interface Notification {
   message: string;
   timestamp: string;
@@ -164,13 +165,39 @@ export default function GroupChat() {
         </div>
       ) : (
         <>
-          <header className="p-2">
+          <header className="p-1 flex gap-2">
             <Button
               onClick={() => {
                 router.push(`/user/routes/${id}`);
               }}
             >
               Detalhes
+            </Button>
+            <Button
+              variant={"outline"}
+              onClick={async () => {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  toast.error("Você deve estar logado");
+                  router.push("/");
+
+                  return;
+                }
+                const service = new RouteService(token);
+                const res = await service.outInRoute(Number(id));
+                if (res.outed) {
+                  toast.success(res.message ?? "Até breve!");
+                  setTimeout(() => {
+                    router.push("/user/routes");
+                  }, 1000);
+                  return;
+                } else {
+                  toast.error(res.message ?? "Erro ao sair da rota!");
+                }
+              }}
+            >
+              <LogOut />
+              Sair
             </Button>
           </header>
           <div className="flex-1 overflow-y-auto p-4 space-y-2">

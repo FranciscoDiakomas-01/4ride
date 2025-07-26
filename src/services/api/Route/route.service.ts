@@ -102,9 +102,10 @@ export default class RouteService {
       };
       return data;
     } catch (error) {
+      console.log(error)
       return {
         outed: false,
-        message: "Erro ao pegar as rotas!",
+        message: "Erro ao sair da rotas!",
       };
     }
   }
