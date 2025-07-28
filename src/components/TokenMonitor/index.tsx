@@ -18,7 +18,7 @@ export default function TokenMonitor() {
     const interval = setInterval(() => {
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.warning("Token expirou, redirecionando...");
+        toast.warning("Sessão expirada, redirecionando...");
         router.push("/");
       }
     }, 1000);

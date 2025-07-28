@@ -92,7 +92,6 @@ export default function Profile() {
         }
       }
     }
-
     get();
     setTimeout(() => {
       setLoad(false);
@@ -160,9 +159,10 @@ export default function Profile() {
                       onClick={() => {
                         if (item.to && item.to?.length > 0) {
                           if (item.title == "Sair") {
+                            toast.success("Sessão terminada");
+                            router.push("/");
                             localStorage.clear();
                             sessionStorage.clear();
-                            toast.success("Sessão terminada");
                           }
                           router.push(item.to);
                         }
