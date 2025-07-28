@@ -160,9 +160,9 @@ export default function Profile() {
                         if (item.to && item.to?.length > 0) {
                           if (item.title == "Sair") {
                             toast.success("Sessão terminada");
-                            router.push("/");
                             localStorage.clear();
                             sessionStorage.clear();
+                            router.push("/");
                           }
                           router.push(item.to);
                         }
