@@ -20,13 +20,13 @@ export default function UserNumber() {
   let servive: UserService;
   const [processing, setProceccing] = useState(false);
   useEffect(() => {
-       const token = localStorage.getItem("token");
-        const role = localStorage.getItem("role");
-        if (!token || role != "ADMIN") {
-          toast.info("Deves estar logado");
-          router.push("/");
-          return
-        }
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (!token || role != "ADMIN") {
+      toast.info("Deves estar logado");
+      router.push("/");
+      return;
+    }
     setTimeout(() => {
       setLoad(false);
     }, 1000);
@@ -79,7 +79,7 @@ export default function UserNumber() {
             router.back();
           }}
         />
-        <h1>Credenciais</h1>
+        <h1>Crendênciais</h1>
       </span>
 
       {load ? (
@@ -96,7 +96,7 @@ export default function UserNumber() {
           >
             <div className="flex justify-center items-center flex-col ">
               <h1 className="text-primary text-2xl font-semibold">
-                Edite as credencias{" "}
+                Edite as Crendênciais{" "}
               </h1>
               <p className="text-sm">da sua conta</p>
             </div>

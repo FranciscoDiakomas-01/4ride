@@ -351,10 +351,12 @@ export default function GroupChat() {
                                 return item && item.name == selectedTaxi;
                               });
                               setTimeout(() => {
-                                if (activedLink) {
-                                  a.href = activedLink.to;
-                                  a.target = "__blank";
-                                  a.click();
+                                if (activedLink?.to) {
+                                  window.open(
+                                    activedLink.to,
+                                    "_blank",
+                                    "noopener,noreferrer"
+                                  );
                                 }
                               }, 2000);
                             } else {

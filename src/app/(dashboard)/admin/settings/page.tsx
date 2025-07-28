@@ -48,7 +48,7 @@ export default function Profile() {
     },
     {
       icon: <KeyRoundIcon />,
-      title: "Credenciais",
+      title: "Crendênciais",
       description: "Atualize sua senha de e autenticação.",
       to: "/admin/settings/credential",
     },
