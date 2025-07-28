@@ -59,11 +59,11 @@ export default function GroupChat() {
       name: "InDrive",
     },
     {
-      to: "https://www.heetch.com/en/pays/angola",
+      to: "https://www.heetch.com/pt/pays/angola",
       name: "Heetch",
     },
     {
-      to: "https://bolt.eu/en-ao/",
+      to: "https://bolt.eu/pt-ao/",
       name: "Bolt",
     },
   ];
