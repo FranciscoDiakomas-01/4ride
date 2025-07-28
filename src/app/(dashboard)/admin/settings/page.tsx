@@ -91,16 +91,7 @@ export default function Profile() {
 
   return (
     <main className="w-full flex flex-col gap-4">
-      <span className="p-4 sticky top-0 shadow-md bg-white flex items-center gap-3 text-xl font-semibold z-[95945]">
-        <ArrowLeft
-          className="cursor-pointer"
-          onClick={() => {
-            router.back();
-          }}
-        />
-        <h1>Perfil</h1>
-      </span>
-
+  
       {load ? (
         <div className="flex justify-center items-center min-h-[70dvh] w-full scale-75">
           <Loader type="Spinner" />

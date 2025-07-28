@@ -77,7 +77,7 @@ export default function Route({
               Entrar no chat
             </Button>
           ) : (
-            <Dialog>
+            <Dialog >
               <DialogTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -89,15 +89,15 @@ export default function Route({
                   Entrar na rota
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent >
                 <DialogHeader>
-                  <DialogTitle>⚠️Atenção antes de continuar!</DialogTitle>
-                  <DialogDescription className="my-4">
+                  <DialogTitle >⚠️Atenção antes de continuar!</DialogTitle>
+                  <DialogDescription className="md:my-4 my-2">
                     Ao clicar em "Entrar na rota", você concorda com as
                     seguintes condições:
                   </DialogDescription>
 
-                  <ol className="flex flex-col gap-4 text-primary/80 text-sm list-disc list-inside ">
+                  <ol className="flex flex-col gap-4 text-primary/80 text-sm list-disc list-inside text-start">
                     <li>
                       Se ainda não estiver na rota, será descontado do seu
                       saldo.
