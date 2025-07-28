@@ -182,7 +182,7 @@ export default function GroupChat() {
                     Antes de sair, lembre-se:
                   </DialogDescription>
 
-                  <ol className="flex flex-col gap-4 text-primary/80 text-sm list-disc list-inside ">
+                  <ol className="flex flex-col gap-4 text-primary/80 text-sm text-start list-disc list-inside ">
                     <li>
                       O valor já descontado ao entrar não será reembolsado.
                     </li>
@@ -220,7 +220,7 @@ export default function GroupChat() {
                       }
                     }}
                   >
-                    Sair na rota
+                    Sair da rota
                   </Button>
                   <DialogClose asChild>
                     <Button className="">Cancelar</Button>
