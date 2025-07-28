@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Loader2, LogOut } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Loader from "@/components/Loader";
@@ -52,20 +51,20 @@ export default function GroupChat() {
   const [load, setLoad] = useState(true);
   const taxis = [
     {
-      icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Yango_Logo.png",
+      to: "https://yango.com/pt_ao/lp/carinvest/?gad_campaignid=22062077173",
       name: "Yango",
     },
     {
-      icon: "https://globaluploads.webflow.com/631f3c4a06c338220369dcdd/63205b96f2c7ec2e0e21885a_kubinga.jpg",
-      name: "Kubinga",
+      to: "https://indrive.com/",
+      name: "InDrive",
     },
     {
-      icon: "https://media.licdn.com/dms/image/C4D0BAQEj3lAeWy7bnw/company-logo_200_200/0/1630557452193?e=2147483647&v=beta&t=yduM7I5QMn4oCyhwk5I9epT6GBgxDY3IEGB9LeSTCeA",
+      to: "https://www.heetch.com/en/pays/angola",
       name: "Heetch",
     },
     {
-      icon: "https://pbs.twimg.com/profile_images/1264899078380312578/r3yyQUeh_400x400.jpg",
-      name: "T´Leva",
+      to: "https://bolt.eu/en-ao/",
+      name: "Bolt",
     },
   ];
 
@@ -121,11 +120,7 @@ export default function GroupChat() {
       setMessages((prev) => [...prev, data]);
     });
 
-    socket.on("notification", (data: Notification) => {
-      toast.info(`📢 ${data.message}`);
-    });
     socket.on("route_ended", (data: any) => {
-      toast.info(`❌ ${data.message}`);
       setMessages((prev) => [...prev, data]);
     });
 
@@ -173,32 +168,66 @@ export default function GroupChat() {
             >
               Detalhes
             </Button>
-            <Button
-              variant={"outline"}
-              onClick={async () => {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                  toast.error("Você deve estar logado");
-                  router.push("/");
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant={"outline"}>
+                  <LogOut />
+                  Sair
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>🚪 Deseja sair da rota?</DialogTitle>
+                  <DialogDescription className="my-4">
+                    Antes de sair, lembre-se:
+                  </DialogDescription>
 
-                  return;
-                }
-                const service = new RouteService(token);
-                const res = await service.outInRoute(Number(id));
-                if (res.outed) {
-                  toast.success(res.message ?? "Até breve!");
-                  setTimeout(() => {
-                    router.push("/user/routes");
-                  }, 1000);
-                  return;
-                } else {
-                  toast.error(res.message ?? "Erro ao sair da rota!");
-                }
-              }}
-            >
-              <LogOut />
-              Sair
-            </Button>
+                  <ol className="flex flex-col gap-4 text-primary/80 text-sm list-disc list-inside ">
+                    <li>
+                      O valor já descontado ao entrar não será reembolsado.
+                    </li>
+                    <li>
+                      Esta ação apenas encerra sua participação na rota atual.
+                    </li>
+                    <li>
+                      Você poderá entrar novamente, mas será descontado
+                      novamente se ainda não estiver ativo na rota no momento da
+                      nova entrada.
+                    </li>
+                  </ol>
+                </DialogHeader>
+                <DialogFooter className="grid-cols-2 grid gap-3 w-full">
+                  <Button
+                    variant={"outline"}
+                    onClick={async () => {
+                      const token = localStorage.getItem("token");
+                      if (!token) {
+                        toast.error("Você deve estar logado");
+                        router.push("/");
+
+                        return;
+                      }
+                      const service = new RouteService(token);
+                      const res = await service.outInRoute(Number(id));
+                      if (res.outed) {
+                        toast.success(res.message ?? "Até breve!");
+                        setTimeout(() => {
+                          router.push("/user/routes");
+                        }, 1000);
+                        return;
+                      } else {
+                        toast.error(res.message ?? "Erro ao sair da rota!");
+                      }
+                    }}
+                  >
+                    Sair na rota
+                  </Button>
+                  <DialogClose asChild>
+                    <Button className="">Cancelar</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </header>
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {messages.map((msg, index) => {
@@ -314,8 +343,22 @@ export default function GroupChat() {
                           },
                           (response: any) => {
                             if (response.status == "Finalizada") {
+                              toast.success(
+                                "Você será redirecionado para o " + selectedTaxi
+                              );
+                              const a = document.createElement("a");
+                              const activedLink = taxis.find((item) => {
+                                return item && item.name == selectedTaxi;
+                              });
+                              setTimeout(() => {
+                                if (activedLink) {
+                                  a.href = activedLink.to;
+                                  a.target = "__blank";
+                                  a.click();
+                                }
+                              }, 2000);
                             } else {
-                              toast.success("Erro ao finalizar a Rota");
+                              toast.error("Erro ao finalizar a Rota");
                               return;
                             }
                           }
@@ -349,7 +392,7 @@ export default function GroupChat() {
                         {processing ? (
                           <Loader2 className="animate-spin" />
                         ) : (
-                          <>Finalizar</>
+                          <>Chamar táxi</>
                         )}
                       </Button>
                     </DialogFooter>

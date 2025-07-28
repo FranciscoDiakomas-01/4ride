@@ -6,13 +6,27 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 interface props {
   item: IRoute;
   showDescription?: boolean;
-  isAdmin ?: boolean
+  isAdmin?: boolean;
 }
 
-export default function Route({ item, showDescription = true , isAdmin = false }: props) {
+export default function Route({
+  item,
+  showDescription = true,
+  isAdmin = false,
+}: props) {
   const router = useRouter();
   return (
     <figure
@@ -39,27 +53,84 @@ export default function Route({ item, showDescription = true , isAdmin = false }
         </div>
         <Image className="h-13 w-13 object-contain" src={car} alt="car" />
       </span>
-
+      {item.isIn && <Badge>✔️Participando!</Badge>}
       {!isAdmin && (
         <figcaption className="grid grid-cols-2 gap-4">
-          <Button
-            variant={"outline"}
-            className={clsx("w-full  h-[45px] text-md border-0 ", {
-              "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
-                showDescription,
-            })}
-            onClick={() => {
-              const myId = localStorage.getItem("id");
-              if (!myId) {
-                toast.error("Você deve estar logado");
-              } else {
-                toast.success("Bem vindo á rota!");
-                router.push(`/user/routes/chat/${item.id}`);
-              }
-            }}
-          >
-            Entrar no chat
-          </Button>
+          {item.isIn ? (
+            <Button
+              variant={"outline"}
+              className={clsx("w-full  h-[45px] text-md border-0 ", {
+                "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
+                  showDescription,
+              })}
+              onClick={(e) => {
+                e.preventDefault();
+                const myId = localStorage.getItem("id");
+                if (!myId) {
+                  toast.error("Você deve estar logado");
+                } else {
+                  toast.success("Bem vindo de volta á rota!");
+                  router.push(`/user/routes/chat/${item.id}`);
+                }
+              }}
+            >
+              Entrar no chat
+            </Button>
+          ) : (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={clsx("w-full  h-[45px] text-md border-0 ", {
+                    "text-green-500 bg-transparent border-green-500/50 border hover:bg-transparent hover:text-green-500":
+                      showDescription,
+                  })}
+                >
+                  Entrar na rota
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>⚠️Atenção antes de continuar!</DialogTitle>
+                  <DialogDescription className="my-4">
+                    Ao clicar em "Entrar na rota", você concorda com as
+                    seguintes condições:
+                  </DialogDescription>
+
+                  <ol className="flex flex-col gap-4 text-primary/80 text-sm list-disc list-inside ">
+                    <li>
+                      Se ainda não estiver na rota, será descontado do seu
+                      saldo.
+                    </li>
+                    <li>
+                      O valor descontado não será devolvido ao sair da rota.
+                    </li>
+                  </ol>
+                </DialogHeader>
+                <DialogFooter className="grid-cols-2 grid gap-3 w-full">
+                  <Button
+                    variant={"outline"}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const myId = localStorage.getItem("id");
+                      if (!myId) {
+                        toast.error("Você deve estar logado");
+                      } else {
+                        toast.success("Bem vindo á rota!");
+                        router.push(`/user/routes/chat/${item.id}`);
+                      }
+                    }}
+                  >
+                    Entrar na rota
+                  </Button>
+                  <DialogClose asChild>
+                    <Button className="">Cancelar</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
+
           {showDescription && (
             <Button
               className="w-full  h-[45px] text-md"
@@ -79,6 +150,7 @@ export default function Route({ item, showDescription = true , isAdmin = false }
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Badge } from "../ui/badge";
 export function RouteAdmin({ item, showDescription = true }: props) {
   const [rout, setRout] = useState(item);
   const router = useRouter();

@@ -12,6 +12,7 @@ interface Route {
   status: string;
   users: string;
   way: string;
+  isIn : boolean
 }
 export default class RouteService {
   constructor(private readonly token: string) {}

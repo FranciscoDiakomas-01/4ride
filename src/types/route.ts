@@ -6,4 +6,5 @@ export default interface IRoute {
   distance: string;
   date: string;
   status: string;
+  isIn ?: boolean
 }

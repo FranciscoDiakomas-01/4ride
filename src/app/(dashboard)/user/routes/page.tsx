@@ -29,12 +29,6 @@ export default function Router() {
   const [toFilter, setToFilter] = useState("");
   const [processing, setProcessing] = useState(false);
   const [routes, setRoutes] = useState<IRoute[]>([]);
-  const [open, setOpen] = useState(false);
-
-  const [filtres, setFiltes] = useState({
-    from: "",
-    to : ""
-  })
   const router = useRouter();
 
   let service: RouteService;
@@ -66,8 +60,9 @@ export default function Router() {
         id: item.id,
         status: item.status,
         users: item.users.length,
+        isIn : item.isIn
       })) as IRoute[];
-
+      console.table(formated)
       setRoutes(formated);
     }
 
@@ -234,7 +229,7 @@ export default function Router() {
             <div className="flex flex-col gap-2 justify-center items-center">
               <Notfound
                 message="Não há rotas activas com esses critérios. Deseja criar uma?"
-                onclick={() => setOpen(true)}
+                onclick={() => {}}
                 buttonLabel=""
               />
               <Dialog>
