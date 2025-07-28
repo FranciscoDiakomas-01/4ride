@@ -65,7 +65,7 @@ export default function RootLayout({
       className={`scroll-smooth text-pretty   ${popins.variable}`}
     >
       <body>
-        <Toaster className="z-[9999999999999999999999999999999999999999999999999999999999]" />
+        <Toaster  className="z-[9999999999999999999999999999999999999999999999999999999999]" />
         {children}
       </body>
     </html>
