@@ -13,7 +13,6 @@ export default class NotifiCationService {
        const data = (await response.json()) as { notifications: [] };
        return data?.notifications ?? [];
      } catch (error) {
-       console.log(error);
        return []
      }
   }
@@ -28,7 +27,6 @@ export default class NotifiCationService {
       const data = (await response.json()) as { notifications: number };
       return data?.notifications ?? 0;
     } catch (error) {
-      console.log(error);
       return 0;
     }
   }

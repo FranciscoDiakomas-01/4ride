@@ -1,6 +1,6 @@
 import server from "../server";
 import ICreateUser from "./dto/create-user.dto";
-import { ILogin } from "./dto/login-user.dto";
+import { ILogin, IRequestReset, IResetPassword } from "./dto/login-user.dto";
 
 export default class UserService {
   constructor(private readonly token: string) {}
@@ -51,7 +51,6 @@ export default class UserService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         logged: false,
         message: "Erro ao criar conta",
@@ -61,6 +60,49 @@ export default class UserService {
       };
     }
   }
+  public async RequestReset(body: IRequestReset) {
+    try {
+      const response = await fetch(`${server}/users/request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data = (await response.json()) as {
+        found: boolean;
+        message: string;
+      };
+      return data;
+    } catch (error) {
+      return {
+        found: false,
+        message: "Erro ao redefinir a senha",
+      };
+    }
+  }
+  public async ResetPassword(body: IResetPassword) {
+    try {
+      const response = await fetch(`${server}/users/reset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data = (await response.json()) as {
+        founded: boolean;
+        message: string;
+      };
+      return data;
+    } catch (error) {
+      return {
+        founded: false,
+        message: "Erro ao redefinir a senha",
+      };
+    }
+  }
+
   public async GetMyData() {
     try {
       const response = await fetch(`${server}/users/me`, {
@@ -79,7 +121,6 @@ export default class UserService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         name: "",
         lastname: "",
@@ -102,19 +143,18 @@ export default class UserService {
       const data = (await response.json()) as {
         message: string;
         users: any[];
-        total: string
-        confirmated: string
-        pendings: string
+        total: string;
+        confirmated: string;
+        pendings: string;
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         message: "Erro ao pegar seus dados!",
         users: [] as any[],
         total: "0",
         confirmated: "0",
-        pendings : "0"
+        pendings: "0",
       };
     }
   }
@@ -134,7 +174,6 @@ export default class UserService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         updated: false,
         message: "Erro ao actualizar os dados",
@@ -157,7 +196,6 @@ export default class UserService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         updated: false,
         message: "Erro ao actualizar os dados",
@@ -183,7 +221,6 @@ export default class UserService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         updated: false,
         message: "Erro ao actualizar os dados",

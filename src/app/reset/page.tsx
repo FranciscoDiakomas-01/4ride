@@ -1,5 +1,4 @@
 "use client";
-
 import "aos/dist/aos.css";
 import AOS from "aos";
 import retangle from "@/assets/retangle.png";
@@ -8,21 +7,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { Eye, EyeClosed, LoaderIcon, PhoneCall } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Eye, EyeClosed, LoaderIcon } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import UserService from "@/services/api/user/user.service";
-import isValidPhone from "@/lib/isValiPhone";
 import { toast } from "sonner";
-import Link from "next/link";
 export default function LoginForm() {
-  const service = new UserService("");
   const router = useRouter();
+  const [token, setToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenData = urlParams.get("token");
+    if (!tokenData) {
+      router.push("/");
+    } else {
+      setToken(tokenData);
+    }
     AOS.init({
       duration: 800,
       once: true,
@@ -32,35 +36,28 @@ export default function LoginForm() {
   async function handelOnSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formdata = new FormData(e.currentTarget);
-    const telefone = formdata.get("tel") as string;
     const password = formdata.get("password") as string;
-    const ValidNumber = isValidPhone(telefone);
-    if (!ValidNumber) {
-      toast.error("Número inválido");
+    const password2 = formdata.get("password2") as string;
+    if (password.length > 0 && password2.length > 0 && password == password2) {
+      setLoading(true);
+      const service = new UserService("");
+      const updated = await service.ResetPassword({
+        password,
+        token: String(token),
+      });
+      if (updated.founded) {
+        toast.success(updated.message ?? "Senha redefinida");
+      } else {
+        toast.error(updated.message ?? "Erro ao redefinir a senha!");
+      }
+      setTimeout(() => {
+        setLoading(false);
+        router.push("/login");
+      }, 1500);
       return;
     } else {
-      setLoading(true);
-      const data = await service.Login({
-        password,
-        telefone,
-      });
-      if (data?.token && data.token.length > 0) {
-        toast.success(data?.message);
-        setTimeout(() => {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.role);
-          localStorage.setItem("id", String(data.id));
-          if (data.role == "ADMIN") {
-            router.push("/admin");
-          } else {
-            router.push("/user");
-          }
-          setLoading(false);
-        }, 1000);
-      } else {
-        toast.error(data?.message);
-        setLoading(false);
-      }
+      toast.error("As senhas devem ser iguais");
+      return;
     }
   }
   return (
@@ -71,7 +68,7 @@ export default function LoginForm() {
       >
         <Image src={retangle} alt="" className="w-full max-h-[160px]" />
         <h1 className="absolute w-[60%] text-2xl left-7 top-[23%] text-white font-semibold">
-          Olá! Faça login para começar
+          Redefini a sua senha
         </h1>
       </div>
       <form
@@ -89,24 +86,8 @@ export default function LoginForm() {
           className="flex flex-col gap-4 -mt-10 w-full"
         >
           <span className="flex flex-col gap-3" data-aos="fade-up">
-            <Label className="text-md font-medium" htmlFor="tel">
-              Telefone
-            </Label>
-            <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
-              <Input
-                type="tel"
-                name="tel"
-                id="tel"
-                placeholder="9xxxxxxx"
-                required
-                className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
-              />
-              <PhoneCall color="#8C8C8C" size={18} />
-            </div>
-          </span>
-          <span className="flex flex-col gap-3" data-aos="fade-up">
             <Label className="text-md font-medium" htmlFor="password">
-              Senha
+              Nova senha
             </Label>
             <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
               <Input
@@ -114,6 +95,7 @@ export default function LoginForm() {
                 name="password"
                 id="password"
                 placeholder="*******"
+                minLength={8}
                 required
                 className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
               />
@@ -131,9 +113,35 @@ export default function LoginForm() {
               </button>
             </div>
           </span>
-          <div className="flex justify-end text-end text-primary text-sm">
-            <Link href="/request">Esqueceste a sua senha ?</Link>
-          </div>
+          <span className="flex flex-col gap-3" data-aos="fade-up">
+            <Label className="text-md font-medium" htmlFor="password">
+              Confirma a senha
+            </Label>
+            <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password2"
+                id="password2"
+                placeholder="*******"
+                minLength={8}
+                required
+                className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
+              />
+              <button
+                type="button"
+                onClick={togglePassword}
+                className="absolute right-2"
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? (
+                  <Eye color="#8C8C8C" size={18} />
+                ) : (
+                  <EyeClosed color="#8C8C8C" size={18} />
+                )}
+              </button>
+            </div>
+          </span>
+
           <div className="flex flex-col gap-4 mt-4" data-aos="fade-up">
             <Button
               type="submit"
@@ -144,7 +152,7 @@ export default function LoginForm() {
               {loading ? (
                 <LoaderIcon className="animate-spin" />
               ) : (
-                "Acessar conta"
+                "Redefinir senha"
               )}
             </Button>
             <Button

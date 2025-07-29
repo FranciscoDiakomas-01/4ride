@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { Eye, EyeClosed, LoaderIcon, PhoneCall, User } from "lucide-react";
+import {
+  Eye,
+  EyeClosed,
+  LoaderIcon,
+  MessageCircleCode,
+  PhoneCall,
+  User,
+} from "lucide-react";
 import UserService from "@/services/api/user/user.service";
 import isValidPhone from "@/lib/isValiPhone";
 import { toast } from "sonner";
@@ -35,6 +42,7 @@ export default function SignInForm() {
     const password = formdata.get("password") as string;
     const name = formdata.get("name") as string;
     const lastname = formdata.get("lastname") as string;
+    const email = formdata.get("email") as string;
     const ValidNumber = isValidPhone(telefone);
     if (!ValidNumber) {
       toast.error("Número inválido");
@@ -49,6 +57,7 @@ export default function SignInForm() {
         telefone: ValidNumber,
         name,
         lastname,
+        email,
       });
       if (data?.token && data.token.length > 0 && data.role.length > 0) {
         toast.success(data?.message);
@@ -59,7 +68,6 @@ export default function SignInForm() {
           router.push("/user");
           setLoading(false);
         }, 1000);
-        console.log(data);
       } else {
         toast.error(data?.message);
         setLoading(false);
@@ -126,22 +134,41 @@ export default function SignInForm() {
               </div>
             </span>
           </div>
-          <span data-aos="fade-up" className="flex flex-col gap-3">
-            <Label className="text-md font-medium" htmlFor="tel">
-              Telefone
-            </Label>
-            <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
-              <Input
-                type="tel"
-                name="tel"
-                id="tel"
-                placeholder="Número de telefone"
-                required
-                className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
-              />
-              <PhoneCall color="#8C8C8C" size={18} />
-            </div>
-          </span>
+          <div className="flex flex-col lg:flex-row gap-4">
+            <span data-aos="fade-up" className="flex flex-col gap-3">
+              <Label className="text-md font-medium" htmlFor="tel">
+                Telefone
+              </Label>
+              <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
+                <Input
+                  type="tel"
+                  name="tel"
+                  id="tel"
+                  placeholder="Número de telefone"
+                  required
+                  className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
+                />
+                <PhoneCall color="#8C8C8C" size={18} />
+              </div>
+            </span>
+            <span data-aos="fade-up" className="flex flex-col gap-3">
+              <Label className="text-md font-medium" htmlFor="tel">
+                Email
+              </Label>
+              <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
+                <Input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Seu email"
+                  required
+                  className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
+                />
+                <MessageCircleCode color="#8C8C8C" size={18} />
+              </div>
+            </span>
+          </div>
+
           <span data-aos="fade-up" className="flex flex-col gap-3">
             <Label className="text-md font-medium" htmlFor="password">
               Senha

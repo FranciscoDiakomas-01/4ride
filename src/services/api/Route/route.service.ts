@@ -31,7 +31,6 @@ export default class RouteService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         fouded: false,
         message: "Erro ao pegar as rotas!",
@@ -56,7 +55,6 @@ export default class RouteService {
       };
       return data;
     } catch (error) {
-      console.log(error);
       return {
         creaed: false,
         message: "Erro ao pegar as rotas!",
@@ -103,7 +101,6 @@ export default class RouteService {
       };
       return data;
     } catch (error) {
-      console.log(error)
       return {
         outed: false,
         message: "Erro ao sair da rotas!",

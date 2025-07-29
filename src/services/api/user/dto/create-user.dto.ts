@@ -3,4 +3,5 @@ export default interface ICreateUser {
   lastname?: string;
   telefone: string;
   password: string;
+  email : string
 }

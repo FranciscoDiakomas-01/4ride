@@ -38,7 +38,6 @@ export default function UserNumber() {
     } else {
       const token = localStorage.getItem("token");
       if (!token) {
-        console.log(token);
         toast.error("Você precisa estar logado");
         router.push("/");
         return;

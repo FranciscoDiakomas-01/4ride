@@ -38,10 +38,8 @@ export default class PaymentService {
         found: boolean;
         data: any[];
       };
-      console.log(data);
       return data;
     } catch (error) {
-      console.log(error);
       return {
         found: false,
         message: "Erro ao pegar seus dados!",
@@ -63,10 +61,8 @@ export default class PaymentService {
         payments: any[];
         stats: any[];
       };
-      console.log(data);
       return data;
     } catch (error) {
-      console.log(error);
       return {
         found: false,
         message: "Erro ao pegar seus dados!",
@@ -89,10 +85,8 @@ export default class PaymentService {
         message: string;
         updated: boolean;
       };
-      console.log(data);
       return data;
     } catch (error) {
-      console.log(error);
       return {
         updated: false,
         message: "Erro ao pegar seus dados!",

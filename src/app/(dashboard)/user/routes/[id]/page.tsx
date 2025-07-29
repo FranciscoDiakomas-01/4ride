@@ -70,7 +70,6 @@ export default function RouterDescription() {
             latitude: number;
             longitude: number;
           };
-          console.log(x, y);
           setCoors({
             from: {
               lat: x.latitude,
@@ -81,7 +80,6 @@ export default function RouterDescription() {
               lng: y.longitude,
             },
           });
-          console.log(data);
           setRoute(formatedRoute);
           setUsers(data.users);
         } catch (error) {

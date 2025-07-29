@@ -8,7 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { Eye, EyeClosed, LoaderIcon, PhoneCall } from "lucide-react";
+import {
+  Eye,
+  EyeClosed,
+  LoaderIcon,
+  MessageCircle,
+  PhoneCall,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import UserService from "@/services/api/user/user.service";
@@ -33,34 +39,18 @@ export default function LoginForm() {
     e.preventDefault();
     const formdata = new FormData(e.currentTarget);
     const telefone = formdata.get("tel") as string;
-    const password = formdata.get("password") as string;
-    const ValidNumber = isValidPhone(telefone);
-    if (!ValidNumber) {
-      toast.error("Número inválido");
-      return;
-    } else {
-      setLoading(true);
-      const data = await service.Login({
-        password,
-        telefone,
-      });
-      if (data?.token && data.token.length > 0) {
-        toast.success(data?.message);
-        setTimeout(() => {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.role);
-          localStorage.setItem("id", String(data.id));
-          if (data.role == "ADMIN") {
-            router.push("/admin");
-          } else {
-            router.push("/user");
-          }
-          setLoading(false);
-        }, 1000);
-      } else {
-        toast.error(data?.message);
+    setLoading(true);
+    const data = await service.RequestReset({
+      telefone,
+    });
+    if (data?.found) {
+      toast.success(data?.message);
+      setTimeout(() => {
         setLoading(false);
-      }
+      }, 1000);
+    } else {
+      toast.error(data?.message);
+      setLoading(false);
     }
   }
   return (
@@ -71,7 +61,7 @@ export default function LoginForm() {
       >
         <Image src={retangle} alt="" className="w-full max-h-[160px]" />
         <h1 className="absolute w-[60%] text-2xl left-7 top-[23%] text-white font-semibold">
-          Olá! Faça login para começar
+          Recuperação se senha!
         </h1>
       </div>
       <form
@@ -97,43 +87,13 @@ export default function LoginForm() {
                 type="tel"
                 name="tel"
                 id="tel"
-                placeholder="9xxxxxxx"
+                placeholder="seu telefone"
                 required
                 className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
               />
               <PhoneCall color="#8C8C8C" size={18} />
             </div>
           </span>
-          <span className="flex flex-col gap-3" data-aos="fade-up">
-            <Label className="text-md font-medium" htmlFor="password">
-              Senha
-            </Label>
-            <div className="flex relative border-1 p-2 border-primary rounded-md justify-center items-center">
-              <Input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                id="password"
-                placeholder="*******"
-                required
-                className="border-0 w-full h-full  shadow-none outline-none placeholder:text-[#8C8C8C] p text-sm"
-              />
-              <button
-                type="button"
-                onClick={togglePassword}
-                className="absolute right-2"
-                aria-label="Toggle password visibility"
-              >
-                {showPassword ? (
-                  <Eye color="#8C8C8C" size={18} />
-                ) : (
-                  <EyeClosed color="#8C8C8C" size={18} />
-                )}
-              </button>
-            </div>
-          </span>
-          <div className="flex justify-end text-end text-primary text-sm">
-            <Link href="/request">Esqueceste a sua senha ?</Link>
-          </div>
           <div className="flex flex-col gap-4 mt-4" data-aos="fade-up">
             <Button
               type="submit"
@@ -141,11 +101,7 @@ export default function LoginForm() {
               variant={"outline"}
               disabled={loading}
             >
-              {loading ? (
-                <LoaderIcon className="animate-spin" />
-              ) : (
-                "Acessar conta"
-              )}
+              {loading ? <LoaderIcon className="animate-spin" /> : "Recuperar"}
             </Button>
             <Button
               variant="outline"

@@ -37,7 +37,6 @@ export default function UserData() {
     }
     async function get() {
       if (!token) {
-        console.log(token);
         toast.error("Você precisa estar logado");
         router.push("/");
         return;
@@ -76,7 +75,6 @@ export default function UserData() {
       }
       const token = localStorage.getItem("token");
       if (!token) {
-        console.log(token);
         toast.error("Você precisa estar logado");
         router.push("/");
         return;

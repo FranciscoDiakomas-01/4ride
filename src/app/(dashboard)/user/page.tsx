@@ -24,7 +24,6 @@ export default function UserHome() {
     const token = localStorage.getItem("token");
     async function get() {
       if (!token) {
-        console.log(token);
         toast.error("Você precisa estar logado");
         router.push("/");
         return;

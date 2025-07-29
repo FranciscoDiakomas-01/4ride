@@ -44,7 +44,6 @@ export default function CreatePayment() {
     try {
       const token = localStorage.getItem("token") ?? "";
       if (!token) {
-        console.log(token);
         toast.error("Você precisa estar logado");
         router.push("/");
         return;
@@ -62,7 +61,6 @@ export default function CreatePayment() {
         amount,
         file: data?.data?.url,
       });
-      console.log(create);
       if (create?.created) {
         toast.success(
           "Estamos a validar o seu pagamento. Aguarde a confirmação."

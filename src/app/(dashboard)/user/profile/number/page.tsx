@@ -37,7 +37,6 @@ export default function UserNumber() {
       if (isValidPhone(oldPhone) && isValidPhone(newPhone)) {
         const token = localStorage.getItem("token");
         if (!token) {
-          console.log(token);
           toast.error("Você precisa estar logado");
           router.push("/");
           return;

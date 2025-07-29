@@ -70,7 +70,6 @@ export default function Users() {
         }
       const service = new UserService(token);
       const data = await service.getAllUsers();
-      console.log(data);
       setUsers(data.users);
       seTstats([
         {

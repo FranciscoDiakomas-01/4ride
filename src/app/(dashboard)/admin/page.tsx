@@ -60,7 +60,6 @@ export default function Payments() {
     async function get() {
       const service = new PaymentService(token ?? "s");
       const data = await service.getAllMyPayment();
-      console.log(data);
       const formatted = data.payments.map((payment) => ({
         amount: payment.amount,
         telefone: payment.user?.telefone || "Não informado",
@@ -180,7 +179,6 @@ export default function Payments() {
                             paymentid: +pay.id,
                             status,
                           });
-                          console.log(data);
 
                           if (data.updated) {
                             toast.success("Confirmado com sucesso!");
